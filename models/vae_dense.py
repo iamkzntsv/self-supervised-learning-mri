@@ -9,15 +9,12 @@ class Encoder(nn.Module):
     def __init__(self,
                  in_channels,
                  latent_dim,
-                 dropout_rate,
-                 device):
+                 dropout_rate):
+
         super(Encoder, self).__init__()
 
         self.latent_dim = latent_dim
         self.dropout_rate = dropout_rate
-
-        # Set device
-        self.device = device
 
         # Define dimensions of hidden layers
         hidden_dims = [32, 64, 128, 128]
@@ -46,11 +43,22 @@ class Encoder(nn.Module):
         )
 
         self.encoder = nn.Sequential(*layers)
+        self.fc_mu = nn.LazyLinear(latent_dim)
+        self.fc_sigma = nn.LazyLinear(latent_dim)
 
-    def encode(self):
-        pass
+    def encode(self, input):
+        out = self.encoder(input)
+        mu = self.fc_mu(out)
+        log_sigma = self.fc_sigma(out)
+
+        return [mu, sigma]
+
 
     def reparametrize(self):
         pass
 
 
+class Decoder(nn.Module):
+
+    def __init__(self):
+        pass

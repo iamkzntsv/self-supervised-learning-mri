@@ -1,47 +1,42 @@
 import torch
-import torch.distributions as dist
-from torch.nn import functional as F
+import torch.nn as nn
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-class Loss_VAE:
+class Loss_VAE(nn.Module):
 
-    def __init__(self, VAE, X, latent_dim):
-        self.latent_dim = latent_dim
-        vae = VAE()
-        X_hat, z, qzx = vae(X)
-        self.elbo = self.reconstruction_loss(X, X_hat) - self.kl_divergence(qzx, z, X)
+    def __init__(self):
+        super(Loss_VAE, self).__init__()
 
-    def compute(self):
-        return -self.elbo
+    def forward(self, X_hat, X, mu, log_var):
+        loss = self.kl_divergence(mu, log_var) + self.reconstruction_loss(X_hat, X)
+        return loss
 
-    def kl_divergence(self, qzx, z, X):
+    @staticmethod
+    def kl_divergence(mu, log_var):
         """
-        Compute the KL divergence given batches of samples from latent code z
-        :param qzx: distribution of z|x produced by the encoder
-        :param z: sample from a distribution q
-        :param X: batch of data instances, shape (B, C, H, W)
-        :return: KL divergence between q(z|x) and p(z)
+        Compute the KL divergence between given distribution q(z|x) and standard normal distribution
+        :param mu: mean vector produced by the encoder, tensor of shape (B, latent_dim)
+        :param log_var: log sigma vector produced by the encoder, tensor of shape (B, latent_dim)
+        :return: KL divergence between q(z|x) and p(z), where p(z)~N(0,I).
         """
-        # Define prior
-        pz = dist.Normal(torch.zeros((X.shape[0], self.latent_dim)).to(device), torch.ones((X.shape[0], self.latent_dim)).to(device))
+        kl = 0.5 * torch.sum((torch.exp(log_var) + torch.square(mu) - 1 - log_var), -1)
+        return torch.mean(kl)
 
-        # Compute log probabilities
-        log_qzx = qzx.log_prob(z)
-        log_pz = pz.log_prob(z)
-
-        # Compute KL divergence
-        kl = (log_qzx - log_pz)
-
-        return kl.sum(-1)
-
-    def reconstruction_loss(self, X, X_hat):
+    @staticmethod
+    def reconstruction_loss(X_hat, X, scale_var=0.001):
         """
         Compute the reconstruction loss
-        :param X:
-        :param X_hat:
-        :return:
+        :param X: input data
+        :param X_hat: output of the decoder, considered as the mean
+        :param scale_var: a small number for scaling variance
+        :return: reconstruction
         """
-        return F.mse_loss(X, X_hat)
+        X = torch.reshape(X, (X.shape[0], -1))
+        X_hat = torch.reshape(X_hat, (X_hat.shape[0], -1))
+        var = torch.ones(X.size()).to(device) * scale_var
+
+        criterion = nn.GaussianNLLLoss(reduction='none').to(device)
+        return torch.mean(torch.sum(criterion(X, X_hat, var), dim=-1))
 

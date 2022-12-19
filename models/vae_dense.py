@@ -8,11 +8,11 @@ class Encoder(nn.Module):
 
     def __init__(self, in_channels, latent_dim, dropout_rate):
         """
-        :param in_channels: number of channels in the input shape
+        :param in_channels: number of channels in the input image
         :param latent_dim: size of latent space (int)
         :param dropout_rate: dropout probability (float)
         """
-        super().__init__()
+        super(Encoder, self).__init__()
         self.latent_dim = latent_dim
         self.dropout_rate = dropout_rate
 
@@ -48,9 +48,9 @@ class Encoder(nn.Module):
 
     def encode(self, input):
         """
-
-        :param input:
-        :return:
+        Pass the input to the encoder and get the latent distribution
+        :param input: data of shape (B, C, H, W)
+        :return: vectors mu and log_var produced by the encoder
         """
         # Compute encoder output
         out = self.encoder(input)
@@ -59,14 +59,14 @@ class Encoder(nn.Module):
         mu = self.fc_mu(out)
         log_var = self.fc_var(out)
 
-        return [mu, log_var]
+        return mu, log_var
 
     def reparameterize(self, mu, log_var):
         """
         Reparameterization trick
-        :param mu:
-        :param log_var:
-        :return:
+        :param mu: vector of means produced by the encoder
+        :param log_var: vector of log variances produced by the encoder
+        :return: sample from the distribution parametrized by mu and var
         """
         std = torch.exp(0.5 * log_var)
         eps = torch.randn_like(std)
@@ -75,11 +75,10 @@ class Encoder(nn.Module):
 
     def forward(self, X):
         """
-        Sample z from a distribution q
+        Get the latent encoding of the data and sample z from a learned distribution
         :param X: input of shape (B, C, H, W)
-        :return:
-          sample from the distribution q_zx
-          a list containing mu and sigma vectors
+        :return: sample from the distribution q_zx,
+                 a list containing mu and sigma vectors
         """
         mu, log_var = self.encode(X)
         z = self.reparameterize(mu, log_var)
@@ -90,7 +89,11 @@ class Encoder(nn.Module):
 class Decoder(nn.Module):
 
     def __init__(self, out_channels, latent_dim):
-        super().__init__()
+        """
+        :param out_channels: number of channels in the reconstruction
+        :param latent_dim: size of the latent space
+        """
+        super(Decoder, self).__init__()
         self.out_channels = out_channels
         self.latent_dim = latent_dim
 
@@ -100,14 +103,11 @@ class Decoder(nn.Module):
         # Build the decoder
         self.decoder_input = nn.Linear(latent_dim, 1024)
 
-        layers = []
-        layers.append(
-            nn.Sequential(
-                nn.ConvTranspose2d(16, 128, kernel_size=1, stride=1),
-                nn.BatchNorm2d(128),
-                nn.LeakyReLU()
-            )
-        )
+        layers = [nn.Sequential(
+            nn.ConvTranspose2d(16, 128, kernel_size=1, stride=1),
+            nn.BatchNorm2d(128),
+            nn.LeakyReLU()
+        )]
 
         for i in range(len(filters) - 1):
             layers.append(
@@ -131,33 +131,34 @@ class Decoder(nn.Module):
     def forward(self, z):
         """
         Reconstruct the image from the latent code
-        :param z: latent code
-        :return:
+        :param z: sample from the latent distribution
+        :return: reconstruction of the sample z
         """
         result = self.decoder_input(z)
-        result = result.view(-1, 16, 8, 8)
+        result = result.reshape(-1, 16, 8, 8)
         result = self.decoder(result)
-        result = self.final_layer(result)
+        x_hat = self.final_layer(result)
 
-        return result
+        return torch.sigmoid(x_hat)
 
 
 class VAE(nn.Module):
 
-    def __init__(self, in_channels, out_channels, latent_dim, dropout_rate):
-        super().__init__()
+    def __init__(self, in_channels, latent_dim, out_channels, dropout_rate):
+        super(VAE, self).__init__()
+        self.latent_dim = latent_dim
         self.encoder = Encoder(in_channels, latent_dim, dropout_rate)
         self.decoder = Decoder(out_channels, latent_dim)
 
-    def forward(self, X):
-        z, qzx = self.encoder(X)
-        x_hat = self.decoder(z)
-        return x_hat, z, qzx
-
     def encode(self, X):
-        z, _ = self.encoder(X)
+        z, _, _ = self.encoder(X)
         return z
 
     def decode(self, z):
         return self.decoder(z)
+
+    def forward(self, X):
+        z, mu, log_var = self.encoder(X)
+        x_hat = self.decoder(z)
+        return x_hat, mu, log_var
 

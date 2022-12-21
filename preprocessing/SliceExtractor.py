@@ -1,5 +1,6 @@
-from preprocessing.extractor import extractor
 from deepbrain import Extractor
+import warnings
+warnings.filterwarnings("default")
 
 
 class SliceExtractor:
@@ -9,8 +10,7 @@ class SliceExtractor:
         self.ext = Extractor()
 
     def get_prob(self, img):
-        return self.ext(img)
-
+        return self.ext.run(img)
 
 
 extractor = SliceExtractor()

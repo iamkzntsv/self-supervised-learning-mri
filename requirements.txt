@@ -1,6 +1,6 @@
-torch~=1.13.0
+torch==1.13.1
 nibabel~=4.0.2
 deepbrain~=0.1
-tqdm~=4.62.3
+tqdm==4.64.1
 pystackreg~=0.2.7
-tensorflow~=2.11.0
+tensorflow==1.15.5

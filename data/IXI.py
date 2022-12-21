@@ -1,7 +1,5 @@
 import os
 import nibabel as nib
-import nibabel.processing
-import numpy as np
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset, DataLoader
 from preprocessing.SliceExtractor import extractor
@@ -29,11 +27,9 @@ class IXI(Dataset):
         :return: a nibabel volume
         """
         # TO DO: implement skull stripping and volume slicing
-        img = nib.processing.conform(nib.load(fname), (128, 128, 128)).get_fdata()
-        img = np.expand_dims(np.expand_dims(img, axis=-1), axis=0)
+        img = nib.load(fname).get_fdata()
         prob = extractor.get_prob(img)
-        mask = [prob > 0.5]
-        print(len(mask))
+        mask = prob > 0.5
 
         return img
 

@@ -1,9 +1,12 @@
-from models.vae_dense import VAE
+from config import get_config
+from train import train
 
 
-channels_in, latent_dim, channels_out = 1, 2, 1
-dropout_prob = 0.2
+def main(config):
+    if config['mode'] == 'train':
+        train(config)
 
-vae = VAE(channels_in, latent_dim, channels_out, dropout_prob)
 
-
+if __name__ == '__main__':
+    config = get_config()
+    main(config)

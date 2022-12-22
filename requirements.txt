@@ -4,3 +4,5 @@ deepbrain~=0.1
 tqdm==4.64.1
 pystackreg~=0.2.7
 tensorflow==1.15.5
+numpy~=1.18.5
+matplotlib~=3.5.3

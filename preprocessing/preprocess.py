@@ -13,8 +13,8 @@ def normalize(image):
 def register(ref, mov, mode='rigid'):
     """
     Align image to the reference image
-    :param ref: reference image, 2D numpy array
-    :param mov: moved image, 2D numpy array of same shape as ref
+    :param ref: reference image, numpy array
+    :param mov: moved image, numpy array of same shape as ref
     :param mode: type of transformation, options: (rigid, affine)
     :return: mov image registered to ref
     """

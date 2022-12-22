@@ -1,8 +1,8 @@
+import numpy as np
 import nibabel as nib
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset, DataLoader
 from preprocessing.SliceExtractor import ext
-from matplotlib import pyplot as plt
 from utils import *
 
 
@@ -20,16 +20,6 @@ class IXI(Dataset):
         # TO DO: implement method
         pass
 
-    def _extract_slices(self, fname):
-        """
-        Get relevant 2D slices from a 3D volume
-        :param fname: path to the image
-        :return:
-        """
-        img = load_nifti(fname)
-        img_sliced = ext.extract(img)
-        return img_sliced
-
     def _make_dataset(self):
         """
         Create a dataset
@@ -38,9 +28,9 @@ class IXI(Dataset):
         fnames = load_paths(self.root)[0]
         images = []
         for i in tqdm(range(len(fnames)), desc='Loading IXI Dataset'):
-            img_sliced = self._extract_slices(fnames[i])
-            print()
-            return
+            img = load_nifti(fnames[i])
+            img_sliced = ext.get_slices(img)
+            images.extend(img_sliced)
 
         return images
 

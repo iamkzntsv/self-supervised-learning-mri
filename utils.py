@@ -3,8 +3,8 @@ import glob
 
 
 def load_nifti(fname):
-    img = nib.load(fname)
-    return img
+    volume = nib.load(fname)
+    return volume
 
 
 def load_paths(path):

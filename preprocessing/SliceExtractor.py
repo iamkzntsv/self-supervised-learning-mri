@@ -1,7 +1,6 @@
 import numpy as np
 import tensorflow as tf
 from deepbrain import Extractor
-from matplotlib import pyplot as plt
 
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
@@ -25,7 +24,7 @@ class SliceExtractor:
         # Loop over axial plane
         slices = []
         for i in range(ny - 1):
-            s = np.squeeze(img_arr[:,i:i + 1,:])
+            s = np.squeeze(img_arr[:, i:i + 1, :])
             s = np.pad(s, ((0, 0), (0, 150 - s.shape[1])))  # pad so that all slices have the same shape
             if np.sum(s) > 0:
                 slices.append(s)

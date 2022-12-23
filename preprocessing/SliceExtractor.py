@@ -18,8 +18,7 @@ class SliceExtractor:
         """
         nx, ny, nz = volume.header.get_data_shape()
 
-        img_arr = volume.get_fdata()
-        img_arr = self.reduce(img_arr)
+        img_arr = self.reduce(volume.get_fdata())
 
         # Loop over axial plane
         slices = []
@@ -28,10 +27,6 @@ class SliceExtractor:
             s = np.pad(s, ((0, 0), (0, 150 - s.shape[1])))  # pad so that all slices have the same shape
             if np.sum(s) > 0:
                 slices.append(s)
-                """
-                plt.imshow(s, cmap='gray')
-                plt.show()
-                """
 
         return slices
 

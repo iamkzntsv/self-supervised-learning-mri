@@ -11,6 +11,6 @@ def load_paths(path):
     return [glob.glob(path + "/*.nii.gz", recursive=True)]
 
 
-def get_average_image():
+def get_average():
     # TO DO
     pass

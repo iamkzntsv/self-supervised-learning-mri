@@ -49,7 +49,7 @@ class Encoder(nn.Module):
     def encode(self, input):
         """
         Pass the input to the encoder and get the latent distribution
-        :param input: data of shape (B, C, H, W)
+        :param input: data_loaders of shape (B, C, H, W)
         :return: vectors mu and log_var produced by the encoder
         """
         # Compute encoder output
@@ -75,7 +75,7 @@ class Encoder(nn.Module):
 
     def forward(self, X):
         """
-        Get the latent encoding of the data and sample z from a learned distribution
+        Get the latent encoding of the data_loaders and sample z from a learned distribution
         :param X: input of shape (B, C, H, W)
         :return: sample from the distribution q_zx,
                  a list containing mu and sigma vectors

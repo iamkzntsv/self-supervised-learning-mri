@@ -28,7 +28,7 @@ class Loss_VAE(nn.Module):
     def reconstruction_loss(X_hat, X, scale_var=0.001):
         """
         Compute the reconstruction loss
-        :param X: input data
+        :param X: input data_loaders
         :param X_hat: output of the decoder, considered as the mean
         :param scale_var: a small number for scaling variance
         :return: reconstruction

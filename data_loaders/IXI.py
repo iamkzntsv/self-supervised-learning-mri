@@ -1,6 +1,6 @@
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset, DataLoader
-from torchvision.transforms import ToTensor, Compose
+from torchvision.transforms import ToTensor, Resize, Compose
 from preprocessing.SliceExtractor import ext
 from preprocessing.transforms import *
 from utils import *
@@ -39,14 +39,15 @@ class IXI(Dataset):
 
 
 def get_loader(root, batch_size, shuffle=True, num_workers=0, drop_last=False):
+
     transform = Compose([
+        Resize((128, 128)),
         ToTensor(),
         Normalize(),
+        Register(),
     ])
 
     dataset = IXI(root, transform)
-    # reg_temp =
-
     return DataLoader(dataset=dataset,
                       batch_size=batch_size,
                       shuffle=shuffle,

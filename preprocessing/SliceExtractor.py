@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+from PIL import Image
 from deepbrain import Extractor
 
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
@@ -12,9 +13,9 @@ class SliceExtractor:
 
     def get_slices(self, volume):
         """
-        Select 2D slices with relevant amounts of brain quantity from a 3D volume
+        Select 2D slices from a 3D volume based on the amounts of brain quantity
         :param volume: nifti image representing MRI volume of a single subject
-        :return: list of slices, where each slice is a numpy array of shape (256, 150)
+        :return: list of slices, where each slice is a PIL Image of shape (256, 150)
         """
         nx, ny, nz = volume.header.get_data_shape()
 
@@ -26,11 +27,11 @@ class SliceExtractor:
             s = np.squeeze(img_arr[:, i:i + 1, :])
             s = np.pad(s, ((0, 0), (0, 150 - s.shape[1])))  # pad so that all slices have the same shape
             if np.sum(s) > 0:
-                slices.append(s)
+                slices.append(Image.fromarray(s))
 
         return slices
 
-    def reduce(self, img_arr, th=15000):
+    def reduce(self, img_arr, th=10000):
         """
         Compute brain quantity for each slice of the axial plane and set irrelevant slices to 0
         :param img_arr: numpy array of shape (nx, ny, nz)

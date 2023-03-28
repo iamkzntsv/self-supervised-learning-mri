@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from losses.loss_vae import LossVAE
+from models.vae import LossVAE
 from utils import calc_activation_shape
 
 

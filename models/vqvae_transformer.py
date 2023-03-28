@@ -12,5 +12,4 @@ def get_transformer_model(spatial_shape):
         attn_layers_depth=6,
         attn_layers_heads=4,
     )
-
     return transformer_model

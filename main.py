@@ -6,7 +6,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 def main():
-    config = get_config(mode='train')
+    config = get_config(mode='test')
     model = model_pipeline(config)
 
 

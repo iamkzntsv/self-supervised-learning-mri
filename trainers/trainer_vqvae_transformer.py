@@ -4,11 +4,9 @@ from models.vqvae import get_vqvae
 import torch.optim as optim
 from data_loaders import ixi
 from preprocessing.transforms import get_transform
-import x_transformers
 from models.vqvae_transformer import get_transformer_model
 from generative.utils.enums import OrderingType
 from generative.utils.ordering import Ordering
-from generative.networks.nets import DecoderOnlyTransformer
 from generative.inferers import VQVAETransformerInferer
 
 import wandb
@@ -59,7 +57,7 @@ def make(config):
     inferer = VQVAETransformerInferer()
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(params=transformer_model.parameters(), lr=5e-4)
+    optimizer = optim.Adam(params=transformer_model.parameters(), lr=5e-4)
 
     return (transformer_model, vqvae_model, inferer, ordering), ixi_train_loader, ixi_valid_loader, criterion, optimizer
 

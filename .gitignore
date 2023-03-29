@@ -1,6 +1,7 @@
 venv/
 data/
 generative/
+wandb/
 
 .idea/
 __pycache__/

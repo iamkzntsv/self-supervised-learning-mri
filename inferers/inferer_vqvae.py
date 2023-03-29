@@ -10,7 +10,6 @@ import sys
 def run(config):
     root, load_from_disk = config['data_path'], config['load_from_disk']
     torch.manual_seed(42)
-    print('cp')
 
     dataset = brats.BRATS(root, transforms.get_transform(), load_from_disk=load_from_disk)
     data_loader = brats.get_loader(dataset, batch_size=1)

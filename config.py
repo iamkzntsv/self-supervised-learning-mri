@@ -13,7 +13,7 @@ def get_config(mode='train'):
         # data_path, load_from_disk = r'C:\Users\sk768\Desktop\IXI-T1', False
         data_path, load_from_disk = None, True
 
-        model_name = 'vqvae'
+        model_name = 'vqvae_transformer'
 
         """
         sweep_configuration = {

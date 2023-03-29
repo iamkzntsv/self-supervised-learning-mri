@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 from preprocessing import transforms
 from models.vqvae import get_vqvae
@@ -15,7 +16,7 @@ def run(config):
     data_loader = brats.get_loader(dataset, batch_size=1)
 
     model = get_vqvae()
-    model.load_state_dict(torch.load('trained_models/vqvae.pt'))
+    model.load_state_dict(torch.load('trained_models/vqvae.pt', map_location=torch.device('cpu')))
     model.eval()
 
     for images, masks in data_loader:
@@ -25,14 +26,21 @@ def run(config):
         img = images[0].squeeze().detach().numpy()
         mask = masks[0].squeeze().detach().numpy()
 
-        plt.figure(figsize=(15, 5))
-        plt.subplot(131)
-        plt.imshow(reconstruction[0, 0].detach().cpu(), vmin=0, vmax=1, cmap="gray")
-        plt.title('Reconstruction')
-        plt.subplot(132)
-        plt.imshow(img, cmap='gray')
+        reconstruction = reconstruction[0, 0].detach().cpu().numpy()
+
+        residual = np.abs(reconstruction - img)
+
+        plt.figure(figsize=(20, 5))
+        plt.subplot(141)
+        plt.imshow(img, vmin=0, vmax=1, cmap="gray")
         plt.title('Original')
-        plt.subplot(133)
-        plt.imshow(mask, cmap='gray')
+        plt.subplot(142)
+        plt.imshow(reconstruction, cmap='gray')
+        plt.title('Reconstruction')
+        plt.subplot(143)
+        plt.imshow(residual, vmin=0, vmax=1, cmap="gray")
+        plt.title('Residual')
+        plt.subplot(144)
+        plt.imshow(mask, cmap="gray")
         plt.title('Tumor Mask')
         plt.show()

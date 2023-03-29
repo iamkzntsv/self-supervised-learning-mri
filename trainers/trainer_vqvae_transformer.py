@@ -23,24 +23,9 @@ def make(config):
     ixi_dataset = ixi.IXI(root, transform, load_from_disk=load_from_disk)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
-    def get_first_two_batches(dataloader):
-        first_two_batches = []
-        batch_count = 0
-
-        for batch in dataloader:
-            first_two_batches.append(batch)
-            batch_count += 1
-            if batch_count >= 2:
-                break
-
-        return first_two_batches
-
-    ixi_train_loader = get_first_two_batches(ixi_train_loader)
-    ixi_valid_loader = get_first_two_batches(ixi_valid_loader)
-
     # Instantiate the VQ-VAE
     vqvae_model = get_vqvae()
-    vqvae_model.load_state_dict(torch.load('trained_models/vqvae.pt'))
+    vqvae_model.load_state_dict(torch.load('trained_models/vqvae.pt', map_location=torch.device('cpu')))
 
     test_data = next(iter(ixi_train_loader))
     spatial_shape = vqvae_model.encode_stage_2_inputs(test_data).shape[2:]
@@ -82,7 +67,6 @@ def train(args, train_loader, valid_loader, criterion, optimizer, config, save_m
     intermediary_images = []
     vqvae_model.eval()
     for epoch in range(config['epochs']):
-
         # Training loop
         transformer_model.train()
         train_loss = 0.0

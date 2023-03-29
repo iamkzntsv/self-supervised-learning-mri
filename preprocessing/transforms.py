@@ -1,7 +1,6 @@
 import numpy as np
 import torch
-import scipy.ndimage as ndi
-from torchvision.transforms import ToTensor, CenterCrop, Resize, Compose
+from torchvision.transforms import ToTensor, CenterCrop, Resize, Compose, ToPILImage
 import torchvision.transforms.functional as TF
 
 
@@ -12,7 +11,8 @@ class Normalize:
 
 def get_transform():
     return Compose([
-            ToTensor(),
+            ToPILImage(),
             Resize((128, 128)),
+            ToTensor(),
             Normalize(),
             ])

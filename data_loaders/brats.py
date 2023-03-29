@@ -39,8 +39,8 @@ class BRATS(Dataset):
         return len(self.samples)
 
     def __getitem__(self, index):
-        img = self.samples[index]
-        mask = self.masks[index]
+        img = self.samples[index].astype(np.float32)
+        mask = self.masks[index].astype(np.float32)
         if self.transform is not None:
             img = self.transform(img)
             mask = self.transform(mask)

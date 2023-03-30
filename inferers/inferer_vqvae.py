@@ -29,6 +29,7 @@ def run(config):
         reconstruction = reconstruction[0, 0].detach().cpu().numpy()
 
         residual = np.abs(reconstruction - img)
+        sys.exit(1)
 
         plt.figure(figsize=(20, 5))
         plt.subplot(141)
@@ -38,7 +39,7 @@ def run(config):
         plt.imshow(reconstruction, cmap='gray')
         plt.title('Reconstruction')
         plt.subplot(143)
-        plt.imshow(residual, vmin=0, vmax=1, cmap="gray")
+        plt.imshow(residual)
         plt.title('Residual')
         plt.subplot(144)
         plt.imshow(mask, cmap="gray")

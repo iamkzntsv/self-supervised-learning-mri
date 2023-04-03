@@ -88,5 +88,5 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
 
         print('Epoch: {}, \tTraining Loss: {:.6f}, \tValidation Loss: {:.6f}'.format(epoch + 1, train_loss, valid_loss))
 
-        if save_model:
-            torch.save(model.state_dict(), 'vqvae.pt')
+    if save_model:
+        torch.save(model.state_dict(), 'vqvae.pt')

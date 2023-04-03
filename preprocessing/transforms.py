@@ -1,7 +1,5 @@
-import numpy as np
 import torch
-from torchvision.transforms import ToTensor, CenterCrop, Resize, Compose, ToPILImage
-import torchvision.transforms.functional as TF
+from torchvision.transforms import ToTensor, Resize, Compose, ToPILImage
 
 
 class Normalize:

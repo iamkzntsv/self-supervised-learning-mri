@@ -29,7 +29,6 @@ def run(config):
         reconstruction = reconstruction[0, 0].detach().cpu().numpy()
 
         residual = np.abs(reconstruction - img)
-        sys.exit(1)
 
         plt.figure(figsize=(20, 5))
         plt.subplot(141)

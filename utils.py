@@ -39,6 +39,6 @@ def save_pickle(fname, file):
         pickle.dump(file, f)
 
 
-def load_pickle(path):
-    with open(path, 'rb') as f:
+def load_pickle(fname):
+    with open(fname, 'rb') as f:
         return pickle.load(f)

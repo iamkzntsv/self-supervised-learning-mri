@@ -14,11 +14,11 @@ import sys
 
 class BRATS(Dataset):
 
-    def __init__(self, root, transform=None, load_from_disk=False):
+    def __init__(self, root, transform=None, preprocess_data=False):
         self.root = root
         self.transform = transform
 
-        if load_from_disk:
+        if not preprocess_data:
             print("Loading data from a disk...")
             self.samples = load_h5('data/brats_data')
             self.masks = load_h5('data/brats_masks')
@@ -62,16 +62,18 @@ class BRATS(Dataset):
             masks.extend(mask_sliced)
 
         print("{} 2D slices collected from {} images.".format(len(images), len(img_paths)))
+
         return images, masks
 
-    def _load_paths(self, root):
-        domains = sorted(os.listdir(root)) # [1:]
+    @staticmethod
+    def _load_paths(root):
+        fnames = sorted(os.listdir(root)) # for Mac: [1:]
         img_paths, mask_paths = [], []
-        for idx, domain in enumerate(domains):
-            img_dir = os.path.join(root, domain)
-            img_paths += [os.path.join(img_dir, fname) for fname in os.listdir(img_dir) if 't1.nii.gz' in fname]
-            mask_paths += [os.path.join(img_dir, fname) for fname in os.listdir(img_dir) if 'seg.nii.gz' in fname]
-
+        for fname in fnames:
+            if 't1.mgz' in fname:
+                img_paths.append(os.path.join(root, fname))
+            elif 'seg.mgz' in fname:
+                mask_paths.append(os.path.join(root, fname))
         return img_paths, mask_paths
 
 

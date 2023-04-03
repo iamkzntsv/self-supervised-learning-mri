@@ -6,14 +6,14 @@ import wandb
 def model_pipeline(config):
     if config['mode'] == 'train':
         # Initialize sweep
-        sweep_id = wandb.sweep(sweep=config['sweep_configuration'], project='playground')  # self-supervised-learning-mri
+        sweep_id = wandb.sweep(sweep=config['sweep_configuration'], project='self-supervised-learning-mri')
 
         # Get the model trainer
         trainer_path = "trainers." + 'trainer_' + config['model_name']
         trainer = importlib.import_module(trainer_path)
 
         def train():
-            with wandb.init(mode='disabled') as run:
+            with wandb.init() as run:  # To disable wandb: mode='disabled'
                 # Initialize the model, data and optimization problem
                 model, train_loader, valid_loader, criterion, optimizer = trainer.make(config)
 
@@ -29,6 +29,6 @@ def model_pipeline(config):
 
         inferer_path = "inferers." + 'inferer_' + config['model_name']
         inferer = importlib.import_module(inferer_path)
-        inferer.run(config)
+        inferer.run(config, data='brats')
 
 

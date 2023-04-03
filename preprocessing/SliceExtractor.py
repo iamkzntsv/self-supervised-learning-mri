@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+from skimage import exposure
 import sys
 import os
 
@@ -14,6 +15,7 @@ class SliceExtractor:
         """
         self.bq_threshold = bq_threshold
         self.mq_threshold = mq_threshold
+        self.hist_eq_reference = np.load('/Users/kuznetsov/Desktop/Sussex/Year 3/Dissertation/self-supervised-learning-mri/preprocessing/ixi_reference_image.npy')
 
     def get_slices(self, volume, mask=None):
         """
@@ -35,8 +37,10 @@ class SliceExtractor:
 
             img_slices = []
             mask_slices = []
+
             for i in range(ny - 1):
 
+                # Get slice, rotate
                 img = np.squeeze(img_arr[:, i:i + 1, :])
                 img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
@@ -45,6 +49,9 @@ class SliceExtractor:
 
                 bq = self.compute_bq(img)
                 if bq > self.bq_threshold:
+                    # Normalization, equalization and cropping
+                    img = img / np.max(img)
+                    img = self.hist_equalize(img, self.hist_eq_reference)
                     img = self.center_crop(img, target_shape)
                     img_slices.append(img)
 
@@ -55,8 +62,10 @@ class SliceExtractor:
         else:
             img_slices = []
             for i in range(ny - 1):
+                # Get slice, rotate and normalize
                 img = np.squeeze(img_arr[:, i:i + 1, :])
                 img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                img = img / np.max(img)
 
                 # Select slices based on the amount of brain tissue
                 bq = self.compute_bq(img)
@@ -83,6 +92,29 @@ class SliceExtractor:
         :return:
         """
         return np.count_nonzero(mask) / (mask.shape[0] * mask.shape[1])
+
+    @staticmethod
+    def hist_equalize(source_img, reference_img):
+        """
+        Perform histogram equalization of source image to reference image
+        :param source_img: source image
+        :param reference_img: reference image
+        :return: equalized source image
+        """
+        # Define non-black mask for reference image
+        reference_mask = (reference_img > 0)
+
+        # Define non-black mask for source image
+        source_mask = (source_img > 0)
+
+        # Perform histogram matching
+        matched_image = exposure.match_histograms(source_img[source_mask], reference_img[reference_mask])
+
+        # Create output image with non-black pixels replaced by matched pixels
+        img_eq = np.zeros_like(source_img)
+        img_eq[source_mask] = matched_image
+
+        return img_eq
 
     @staticmethod
     def center_crop(img, size, offset=15):

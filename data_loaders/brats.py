@@ -67,7 +67,7 @@ class BRATS(Dataset):
 
     @staticmethod
     def _load_paths(root):
-        fnames = sorted(os.listdir(root)) # for Mac: [1:]
+        fnames = sorted(os.listdir(root))[1:] # for Mac: [1:]
         img_paths, mask_paths = [], []
         for fname in fnames:
             if 't1.mgz' in fname:

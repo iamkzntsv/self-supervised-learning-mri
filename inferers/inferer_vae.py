@@ -16,10 +16,10 @@ def run(config, data='ixi'):
     transform = get_transform()
 
     model = VAE(config['latent_dim'])
-    model.load_state_dict(torch.load('vae.pt'))
+    # model.load_state_dict(torch.load('vae.pt'))
     model.eval()
 
-    if data == 'ixi':
+    if data == 'ixi_synth':
         dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
         data_loader, _ = ixi.get_loader(dataset, batch_size=1)
 
@@ -41,6 +41,7 @@ def run(config, data='ixi'):
     elif data == 'brats':
         dataset = brats.BRATS(root, transform, preprocess_data=preprocess_data)
         data_loader = brats.get_loader(dataset, batch_size=1)
+        sys.exit(1)
 
         for images, masks in data_loader:
             reconstruction, _, _ = model(images)

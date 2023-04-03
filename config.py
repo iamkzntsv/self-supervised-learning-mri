@@ -58,6 +58,7 @@ def get_config(mode='train'):
         batch_size = 128
 
         data_path, preprocess_data = r'C:\Users\sk768\Desktop\brats_data', True
+        data_path, preprocess_data = r'/Users/kuznetsov/Desktop/brats_data', True
 
         model_name = 'vae'
 

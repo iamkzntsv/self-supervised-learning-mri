@@ -3,14 +3,13 @@ import torch.nn as nn
 from models.vqvae import get_vqvae
 import torch.optim as optim
 from data_loaders import ixi
-from preprocessing.transforms import get_transform
+from processing.transforms import get_transform
 from models.vqvae_transformer import get_transformer_model
 from generative.utils.enums import OrderingType
 from generative.utils.ordering import Ordering
 from generative.inferers import VQVAETransformerInferer
 
 import wandb
-import sys
 
 
 def make(config):

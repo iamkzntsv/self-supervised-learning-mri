@@ -5,7 +5,7 @@ import nibabel as nib
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
-from preprocessing.SliceExtractor import ext
+from processing.SliceExtractor import ext
 from utils import *
 import wandb
 import re
@@ -67,7 +67,7 @@ class BRATS(Dataset):
 
     @staticmethod
     def _load_paths(root):
-        fnames = sorted(os.listdir(root))[1:] # for Mac: [1:]
+        fnames = sorted(os.listdir(root))  # on Mac add [1:] to handle .DSStore file
         img_paths, mask_paths = [], []
         for fname in fnames:
             if 't1.mgz' in fname:

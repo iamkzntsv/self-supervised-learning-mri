@@ -1,17 +1,17 @@
 LATENT_DIM = 128
+TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data\train'
+TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'
 
 
 def get_config(mode='train'):
     if mode == 'train':
         input_dims = (1, 128, 128)
-        epochs = 15
+        epochs = 30
         dropout = 0.2
         sigma = 0.01
 
-        # data_path, preprocess_data = r'C:\Users\sk768\Desktop\ixi_data\train', True
-        data_path, preprocess_data = r'C:\Users\sk768\Desktop\ixi_train', False
-
-        model_name = 'vae'
+        model_name = 'res_vae'
+        preprocess_data = True
 
         """
         sweep_configuration = {
@@ -49,7 +49,7 @@ def get_config(mode='train'):
                 'dropout': dropout,
                 'latent_dim': LATENT_DIM,
                 'sigma': sigma,
-                'data_path': data_path,
+                'data_path': TRAIN_DATA_PATH,
                 'preprocess_data': preprocess_data,
                 }
 
@@ -57,8 +57,7 @@ def get_config(mode='train'):
         input_dims = (1, 128, 128)
         batch_size = 128
 
-        data_path, preprocess_data = r'C:\Users\sk768\Desktop\brats_data', True
-        data_path, preprocess_data = r'/Users/kuznetsov/Desktop/brats_data', True
+        preprocess_data = True
 
         model_name = 'vae'
 
@@ -67,6 +66,6 @@ def get_config(mode='train'):
                 'input_dims': input_dims,
                 'batch_size': batch_size,
                 'latent_dim': LATENT_DIM,
-                'data_path': data_path,
+                'data_path': TEST_DATA_PATH,
                 'preprocess_data': preprocess_data,
                 }

@@ -4,8 +4,6 @@ from processing import transforms
 from models.vqvae import get_vqvae
 from data_loaders import brats
 from matplotlib import pyplot as plt
-from utils import *
-import sys
 
 
 def run(config, data='ixi'):

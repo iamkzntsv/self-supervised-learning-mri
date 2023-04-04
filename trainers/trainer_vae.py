@@ -1,14 +1,12 @@
-import numpy as np
+
 import torch
 from torch import optim
 from data_loaders import ixi
 from models.vae import VAE, LossVAE
 from processing.transforms import get_transform
-import matplotlib.pyplot as plt
 
 
 import wandb
-import sys
 
 
 def make(config):

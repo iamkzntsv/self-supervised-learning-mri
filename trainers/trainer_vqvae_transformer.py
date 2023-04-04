@@ -10,7 +10,6 @@ from generative.utils.ordering import Ordering
 from generative.inferers import VQVAETransformerInferer
 
 import wandb
-import sys
 
 
 def make(config):

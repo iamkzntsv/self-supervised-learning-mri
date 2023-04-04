@@ -26,10 +26,13 @@ class IXI(Dataset):
 
         else:
             self.samples = self._make_dataset()
-            print(len(self.samples))
             print('Saving...')
-            save_h5(self.samples, name='ixi_data.h5')
-            print('Saving Successful!')
+            if len(self.samples) > 0:
+                print("Saving successful. {} images collected from IXI dataset.".format(len(self.samples)))
+                save_h5(self.samples, name='ixi_data.h5')
+            else:
+                print("Saving error. Check the data path")
+                sys.exit(0)
 
     def __len__(self):
         return len(self.samples)

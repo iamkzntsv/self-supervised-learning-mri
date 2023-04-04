@@ -2,26 +2,26 @@ import torch
 from torch import optim
 from data_loaders import ixi
 from models.res_vae import ResVAE
-from losses.loss_vae import LossVAE
+from models.vae import LossVAE
 from processing.transforms import get_transform
 
 import wandb
 
 
 def make(config):
-    root, load_from_disk = config['data_path'], config['load_from_disk']
+    root, preprocess_data = config['data_path'], config['preprocess_data']
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
 
     transform = get_transform()
-    ixi_dataset = ixi.IXI(root, transform, load_from_disk=load_from_disk)
+    ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
     latent_dim = config['latent_dim']
 
     # Instantiate the model
-    model = ResVAE(latent_dim, layer_list=[3, 4, 6, 3])
+    model = ResVAE(latent_dim)
     model.train()
 
     # Loss function and Optimizer
@@ -89,13 +89,4 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
         print('Epoch: {}, \tTraining Loss: {:.6f}, \tValidation Loss: {:.6f}'.format(epoch + 1, train_loss, valid_loss))
 
     if save_model:
-        torch.save(model.state_dict(), 'res_vae.pt')
-    """
-    # Sample from the learned distribution and save the result
-        z = model.sample(1)
-        x_hat = model.decode(z)
-
-        plt.imshow(np.squeeze(x_hat.cpu().detach().numpy()), cmap='gray')
-        plt.title('Latent dim: {}, Epoch: {}'.format(config.latent_dim, epoch + 1))
-        plt.savefig('images/img_' + str(epoch + 1) + '.png')
-    """
+        torch.save(model.state_dict(), f"res_vae_{config['latent_dim']}.pt")

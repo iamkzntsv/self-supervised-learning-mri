@@ -234,7 +234,7 @@ class Decoder(nn.Module):
 
 class ResVAE(nn.Module):
 
-    def __init__(self, latent_dim, layer_list=[1, 1, 1, 1]):
+    def __init__(self, latent_dim, layer_list=[3, 4, 6, 3]):
         super(ResVAE, self).__init__()
         self.encoder = Encoder(latent_dim, layer_list)
         self.decoder = Decoder(latent_dim, layer_list)

@@ -1,5 +1,5 @@
 import torch
-from preprocessing import transforms
+from processing import transforms
 from models.res_vae import ResVAE
 from data_loaders import brats
 from matplotlib import pyplot as plt

@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from preprocessing import transforms
+from processing import transforms
 from models.vqvae import get_vqvae
 from data_loaders import brats
 from matplotlib import pyplot as plt

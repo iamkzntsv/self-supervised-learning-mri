@@ -3,7 +3,7 @@ from torch import optim
 from data_loaders import ixi
 from models.res_vae import ResVAE
 from losses.loss_vae import LossVAE
-from preprocessing.transforms import get_transform
+from processing.transforms import get_transform
 
 import wandb
 

@@ -2,7 +2,7 @@ import torch
 from torch import optim
 from data_loaders import ixi
 from models.ms_vae import MSVAE, LossMSVAE
-from preprocessing.transforms import get_transform
+from processing.transforms import get_transform
 
 import wandb
 

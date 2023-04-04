@@ -3,7 +3,7 @@ import torch.nn as nn
 from models.vqvae import get_vqvae
 import torch.optim as optim
 from data_loaders import ixi
-from preprocessing.transforms import get_transform
+from processing.transforms import get_transform
 
 import wandb
 

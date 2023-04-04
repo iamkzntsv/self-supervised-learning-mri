@@ -5,7 +5,7 @@ import nibabel as nib
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
-from preprocessing.SliceExtractor import ext
+from processing.SliceExtractor import ext
 from utils import *
 import wandb
 import re

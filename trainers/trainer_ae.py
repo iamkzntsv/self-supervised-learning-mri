@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch import optim
 from data_loaders import ixi
 from models.ae_dense import AE
-from preprocessing.transforms import get_transform
+from processing.transforms import get_transform
 
 import wandb
 

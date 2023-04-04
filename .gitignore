@@ -2,6 +2,9 @@ venv/
 data/
 generative/
 wandb/
+brats_data.h5
+brats_masks.h5
+ixi_data.h5
 
 .idea/
 __pycache__/

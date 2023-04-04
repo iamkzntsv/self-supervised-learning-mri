@@ -7,7 +7,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 def main():
-    config = get_config(mode='train')
+    config = get_config(mode='test')
     model = model_pipeline(config)
 
 

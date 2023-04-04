@@ -10,7 +10,7 @@ def get_config(mode='train'):
         dropout = 0.2
         sigma = 0.01
 
-        model_name = 'vae'
+        model_name = 'res_vae'
         preprocess_data = True
 
         """

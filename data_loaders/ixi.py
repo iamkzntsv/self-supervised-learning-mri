@@ -49,7 +49,7 @@ class IXI(Dataset):
         images = []
         for i in tqdm(range(len(fnames)), desc='Loading IXI Dataset'):
             img = nib.load(fnames[i])
-            img_sliced = ext.get_slices(img, vol_id=i, mask=None)
+            img_sliced = ext.get_slices(img, mask=None)
             images.extend(img_sliced)
 
         print("{} 2D slices collected from {} images.".format(len(images), len(fnames)))

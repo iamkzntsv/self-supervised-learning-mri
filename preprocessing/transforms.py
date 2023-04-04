@@ -12,5 +12,4 @@ def get_transform():
             ToPILImage(),
             Resize((128, 128)),
             ToTensor(),
-            Normalize(),
             ])

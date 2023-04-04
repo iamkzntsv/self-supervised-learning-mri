@@ -20,8 +20,8 @@ class BRATS(Dataset):
 
         if not preprocess_data:
             print("Loading data from a disk...")
-            self.samples = load_h5('data/brats_data')
-            self.masks = load_h5('data/brats_masks')
+            self.samples = load_h5('brats_data')
+            self.masks = load_h5('brats_masks')
             if len(self.samples) > 0:
                 print("Data loading successful. {} images collected from BRATS dataset.".format(len(self.samples)))
             else:
@@ -67,13 +67,12 @@ class BRATS(Dataset):
 
     @staticmethod
     def _load_paths(root):
-        fnames = sorted(os.listdir(root))  # on Mac add [1:] to handle .DSStore file
+        fol_names = sorted(os.listdir(root))[1:]  # on Mac add [1:] to handle .DS_Store file
         img_paths, mask_paths = [], []
-        for fname in fnames:
-            if 't1.mgz' in fname:
-                img_paths.append(os.path.join(root, fname))
-            elif 'seg.mgz' in fname:
-                mask_paths.append(os.path.join(root, fname))
+        for fol_name in fol_names:
+            fnames = sorted(os.listdir(os.path.join(root, fol_name)))
+            img_paths.append(os.path.join(root, fol_name, fnames[-1]))
+            mask_paths.append(os.path.join(root, fol_name, fnames[-2]))
         return img_paths, mask_paths
 
 

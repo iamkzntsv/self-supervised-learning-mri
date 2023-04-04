@@ -8,14 +8,15 @@ from processing.postprocessing import postprocessing_pipeline
 
 
 def run(config, data='ixi_synth'):
-    root, preprocess_data = config['data_path'], config['preprocess_data']
+    root, preprocess_data = config['test_data_path'], config['preprocess_data']
     torch.manual_seed(42)
 
     transform = get_transform()
 
-    latent_dim = 512
+    latent_dim = 32
     model = VAE(latent_dim)
-    model.load_state_dict(torch.load(f'trained_models/vae_{latent_dim}.pt'))
+    model.load_state_dict(torch.load(f'trained_models/vae_{latent_dim}.pt', map_location=torch.device(
+        'cpu')))  # if CPU add param: map_location=torch.device('cpu')
     model.eval()
 
     if data == 'ixi_synth':
@@ -57,11 +58,30 @@ def run(config, data='ixi_synth'):
 
             c += 1
 
-            plt.figure(figsize=(15, 5))
-            plt.subplot(131)
+            plt.figure(figsize=(20, 5))
+            plt.subplot(141)
+            plt.title('Anomalous Image')
+            plt.axis('off')
             plt.imshow(img, cmap='gray')
-            plt.subplot(132)
+            plt.subplot(142)
             plt.imshow(residual, cmap='gray')
-            plt.subplot(133)
+            plt.title('Residual')
+            plt.axis('off')
+            plt.subplot(143)
             plt.imshow(refined_mask, cmap='gray')
+            plt.title('Detected Anomaly')
+            plt.axis('off')
+            plt.subplot(144)
+            plt.imshow(mask, cmap='gray')
+            plt.title('Ground Truth')
+            plt.axis('off')
             plt.show()
+
+
+def compute_mq(mask):
+    """
+    Compute mask quantity
+    :param mask: a 2D segmentation mask
+    :return:
+    """
+    return np.count_nonzero(mask) / (mask.shape[0] * mask.shape[1])

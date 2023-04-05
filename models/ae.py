@@ -136,7 +136,7 @@ class AE(nn.Module):
         super(AE, self).__init__()
 
         if layers is None:
-            layers = [1, 1, 1, 1]
+            layers = [3, 4, 6, 3]
 
         self.encoder = Encoder(latent_dim, layers)
         self.decoder = Decoder(latent_dim)

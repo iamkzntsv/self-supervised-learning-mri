@@ -1,34 +1,82 @@
+import numpy as np
 import torch
-from processing import transforms
 from models.res_vae import ResVAE
-from data_loaders import brats
+from data_loaders import ixi, brats
 from matplotlib import pyplot as plt
+from processing.transforms import get_transform
+from processing.postprocessing import postprocessing_pipeline
 
 
-def run(config):
-    root, load_from_disk = config['data_path'], config['load_from_disk']
+def run(config, data='ixi_synth'):
     torch.manual_seed(42)
+    root, preprocess_data = config['test_data_path'], config['preprocess_data']
+    latent_dim = config['latent_dim']
 
-    dataset = brats.BRATS(root, transforms.get_transform(), load_from_disk=load_from_disk)
-    data_loader = brats.get_loader(dataset, batch_size=1)
-
-    model = ResVAE(config['latent_dim'])
-    model.load_state_dict(torch.load('trained_models/res_vae.pt'))
+    latent_dim = config['latent_dim']
+    model = ResVAE(latent_dim)
+    model.load_state_dict(torch.load('trained_models/res_vae_128.pt'))  # if CPU add param: map_location=torch.device('cpu')
     model.eval()
 
-    for images, masks in data_loader:
-        images = torch.tensor(images, dtype=torch.float32)
-        reconstruction, _, _ = model(images)
+    transform = get_transform()
 
-        reconstruction = reconstruction[0].squeeze().detach().numpy()
-        img = images[0].squeeze().detach().numpy()
-        mask = masks[0].squeeze().detach().numpy()
+    if data == 'ixi_synth':
+        dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
+        data_loader, _ = ixi.get_loader(dataset, batch_size=1)
 
-        plt.figure(figsize=(15, 5))
-        plt.subplot(131)
-        plt.imshow(reconstruction, vmin=0, vmax=1, cmap="gray")
-        plt.subplot(132)
-        plt.imshow(img, cmap='gray')
-        plt.subplot(133)
-        plt.imshow(mask, cmap='gray')
-        plt.show()
+        for images in data_loader:
+            reconstruction, _, _ = model(images)
+
+            reconstruction = reconstruction[0].squeeze().detach().numpy()
+            img = images[0].squeeze().detach().numpy()
+
+            residual = np.abs(img - reconstruction, dtype=np.float32)
+            residual[residual < 0.2] = 0
+            residual[residual > 0] = 1
+
+            plt.figure(figsize=(15, 5))
+            plt.subplot(131)
+            plt.imshow(img, cmap='gray')
+            plt.subplot(132)
+            plt.imshow(reconstruction, cmap='gray')
+            plt.subplot(133)
+            plt.imshow(residual, cmap='gray')
+            plt.show()
+
+    elif data == 'brats':
+        dataset = brats.BRATS(root, transform, preprocess_data=preprocess_data)
+        data_loader = brats.get_loader(dataset, batch_size=1)
+
+        c = 0
+        for images, masks in data_loader:
+            reconstruction, _, _ = model(images)
+
+            img = images[0].squeeze().detach().numpy()
+            mask = masks[0].squeeze().detach().numpy()
+            reconstruction = reconstruction[0].squeeze().detach().numpy()
+
+            residual, binary_mask, refined_mask = postprocessing_pipeline(img, reconstruction, 30)
+
+            c += 1
+
+            plt.figure(figsize=(25, 5))
+            plt.subplot(151)
+            plt.title('Anomalous Image')
+            plt.axis('off')
+            plt.imshow(img, cmap='gray')
+            plt.subplot(152)
+            plt.title('Reconstruction')
+            plt.axis('off')
+            plt.imshow(reconstruction, cmap='gray')
+            plt.subplot(153)
+            plt.imshow(residual, cmap='gray')
+            plt.title('Residual')
+            plt.axis('off')
+            plt.subplot(154)
+            plt.imshow(refined_mask, cmap='gray')
+            plt.title('Detected Anomaly')
+            plt.axis('off')
+            plt.subplot(155)
+            plt.imshow(mask, cmap='gray')
+            plt.title('Ground Truth')
+            plt.axis('off')
+            plt.show()

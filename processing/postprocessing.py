@@ -28,8 +28,8 @@ def extract_n_largest_blobs(binary_mask, n=1, min_area=60):
     return refined_mask
 
 
-def postprocessing_pipeline(original_image, reconstructed_image, threshold, kernel_size=(3, 3),
-                            operations=['opening'], n_largest_blobs=3, blur_kernel_size=3, blur_sigma=1):
+def postprocessing_pipeline(original_image, reconstructed_image, threshold=30, kernel_size=(3, 3),
+                            operations=['opening', 'closing'], n_largest_blobs=3, blur_kernel_size=3, blur_sigma=1):
     # Convert images to the range [0, 255]
     original_image_255 = (original_image * 255).astype(np.uint8)
     reconstructed_image_255 = (reconstructed_image * 255).astype(np.uint8)

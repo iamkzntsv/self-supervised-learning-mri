@@ -1,9 +1,9 @@
-TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data'
-TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'
+TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data\train'  # IXI train data path
+TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'  # test data path
 
 
 def get_config(mode='train', model_name='vae', latent_dim=128):
-    epochs = 30
+    epochs = 50
     dropout = 0.2
     sigma = 0.01
     preprocess_data = True
@@ -17,7 +17,7 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
         },
         'parameters': {
             'batch_size': {'values': [64]},
-            'lr': {'values': [1e-3]}
+            'lr': {'values': [1e-4]}
         }
     }
 

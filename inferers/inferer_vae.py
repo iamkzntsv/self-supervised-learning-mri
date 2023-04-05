@@ -8,16 +8,16 @@ from processing.postprocessing import postprocessing_pipeline
 
 
 def run(config, data='ixi_synth'):
-    root, preprocess_data = config['test_data_path'], config['preprocess_data']
     torch.manual_seed(42)
+    root, preprocess_data = config['test_data_path'], config['preprocess_data']
+    latent_dim = config['latent_dim']
+
+    latent_dim = config['latent_dim']
+    model = VAE(latent_dim)
+    model.load_state_dict(torch.load(f'trained_models/vae_{latent_dim}.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    model.eval()
 
     transform = get_transform()
-
-    latent_dim = 32
-    model = VAE(latent_dim)
-    model.load_state_dict(torch.load(f'trained_models/vae_{latent_dim}.pt', map_location=torch.device(
-        'cpu')))  # if CPU add param: map_location=torch.device('cpu')
-    model.eval()
 
     if data == 'ixi_synth':
         dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
@@ -76,12 +76,3 @@ def run(config, data='ixi_synth'):
             plt.title('Ground Truth')
             plt.axis('off')
             plt.show()
-
-
-def compute_mq(mask):
-    """
-    Compute mask quantity
-    :param mask: a 2D segmentation mask
-    :return:
-    """
-    return np.count_nonzero(mask) / (mask.shape[0] * mask.shape[1])

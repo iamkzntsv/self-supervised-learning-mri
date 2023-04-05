@@ -9,7 +9,7 @@ import wandb
 
 
 def make(config):
-    root, preprocess_data = config['data_path'], config['preprocess_data']
+    root, preprocess_data = config['train_data_path'], config['preprocess_data']
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr

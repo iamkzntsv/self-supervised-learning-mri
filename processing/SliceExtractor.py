@@ -15,7 +15,7 @@ class SliceExtractor:
         """
         self.bq_threshold = bq_threshold
         self.mq_threshold = mq_threshold
-        self.hist_eq_reference = np.load('/Users/kuznetsov/Desktop/ixi_reference_image.npy')
+        self.hist_eq_reference = np.load('processing/ixi_reference_image.npy')
 
     def get_slices(self, volume, mask=None):
         """

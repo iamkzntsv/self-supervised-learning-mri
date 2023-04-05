@@ -1,5 +1,5 @@
-TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data\train'
-TEST_DATA_PATH = r'/Users/kuznetsov/Desktop/brats_data'
+TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data'
+TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'
 
 
 def get_config(mode='train', model_name='vae', latent_dim=128):

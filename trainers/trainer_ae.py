@@ -56,9 +56,9 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Zero gradients
             optimizer.zero_grad()
             # Forward pass
-            x_hat, mu, log_var = model(images)
+            x_hat = model(images)
             # Calculate the loss
-            loss = criterion(x_hat, images, mu, log_var)
+            loss = criterion(x_hat, images)
             loss.backward()
             # Update parameters
             optimizer.step()
@@ -72,9 +72,9 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Move image tensor to device
             images = images.to(device, dtype=torch.float)
             # Forward pass
-            x_hat, mu, log_var = model(images)
+            x_hat = model(images)
             # Calculate the loss
-            loss = criterion(x_hat, images, mu, log_var)
+            loss = criterion(x_hat, images)
             # Update validation loss
             valid_loss += (loss.item() * wandb.config.batch_size)
 

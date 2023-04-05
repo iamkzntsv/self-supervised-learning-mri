@@ -8,7 +8,6 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-
 def main():
     """
     # conda run -n myGPUenv python main.py -m test -n vae -l 128
@@ -23,10 +22,11 @@ def main():
     """
     # wandb API key: c85c93a21cc371625da06a2c2a0b27b2061d0ba8
     mode = 'train'
-    model_name = 'res_vae'
-    latent_dim = 256
-    config = get_config(mode=mode, model_name=model_name, latent_dim=latent_dim)
-    model = model_pipeline(config)
+    model_name = 'ae'
+    latent_dims = [32, 64, 128, 256, 512]
+    for latent_dim in latent_dims:
+        config = get_config(mode=mode, model_name=model_name, latent_dim=latent_dim)
+        model = model_pipeline(config)
 
 
 if __name__ == '__main__':

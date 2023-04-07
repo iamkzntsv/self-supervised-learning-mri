@@ -1,23 +1,41 @@
 import torch
-from generative.networks.nets import VQVAE
+import torch.nn as nn
+from generative.networks.nets import VQVAE as VQVAEMODEL
+from monai.networks.layers import Act
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def get_vqvae():
-    vqvae = VQVAE(
-        spatial_dims=2,
-        in_channels=1,
-        out_channels=1,
-        num_channels=(256, 256),
-        num_res_channels=256,
-        num_res_layers=2,
-        downsample_parameters=((2, 4, 1, 1), (2, 4, 1, 1)),
-        upsample_parameters=((2, 4, 1, 1, 0), (2, 4, 1, 1, 0)),
-        num_embeddings=256,
-        embedding_dim=32,
-    )
-    return vqvae
+class VQVAE(nn.Module):
+    def __init__(self, latent_dim, commitment_cost=0.01, dropout_rate=0.2):
+        super(VQVAE, self).__init__()
+        self.latent_dim = latent_dim
+        self.commitment_cost = commitment_cost
+        self.dropout_rate = dropout_rate
 
+        num_channels = (32, 64, 128, 128)
+        num_res_channels = (32, 64, 128, 128)
+        num_res_layers = 0
+        downsample_parameters = ((2, 5, 1, 2), (2, 5, 1, 2), (2, 5, 1, 2), (2, 5, 1, 2))
+        upsample_parameters = ((2, 5, 1, 2, 1), (2, 5, 1, 2, 1), (2, 5, 1, 2, 1), (2, 5, 1, 2, 1))
+
+        self.vqvae = VQVAEMODEL(
+            spatial_dims=2,
+            in_channels=1,
+            out_channels=1,
+            num_channels=num_channels,
+            num_res_channels=num_res_channels,
+            num_res_layers=num_res_layers,
+            downsample_parameters=downsample_parameters,
+            upsample_parameters=upsample_parameters,
+            num_embeddings=latent_dim,
+            embedding_dim=32,
+            commitment_cost=commitment_cost,
+            dropout=dropout_rate,
+            output_act=Act["sigmoid"]
+        )
+
+    def forward(self, x):
+        return self.vqvae(x)
 
 

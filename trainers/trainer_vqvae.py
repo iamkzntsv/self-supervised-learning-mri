@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from models.vqvae import get_vqvae
+from models.vqvae import VQVAE
 import torch.optim as optim
 from data_loaders import ixi
 from processing.transforms import get_transform
@@ -9,17 +9,19 @@ import wandb
 
 
 def make(config):
-    root, load_from_disk = config['data_path'], config['load_from_disk']
+    root, preprocess_data = config['train_data_path'], config['preprocess_data']
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
 
     transform = get_transform()
-    ixi_dataset = ixi.IXI(root, transform, load_from_disk=load_from_disk)
+    ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
+    latent_dim = config['latent_dim']
+
     # Instantiate the model
-    model = get_vqvae()
+    model = VQVAE(latent_dim)
     model.train()
 
     # Loss function and Optimizer
@@ -53,7 +55,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Zero gradients
             optimizer.zero_grad()
             # Forward pass
-            reconstruction, quantization_loss = model(images=images)
+            reconstruction, quantization_loss = model(images)
             # Calculate the loss
             recons_loss = criterion(reconstruction.float(), images.float())
             loss = recons_loss + quantization_loss
@@ -70,7 +72,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Move image tensor to device
             images = images.to(device, dtype=torch.float)
             # Forward pass
-            reconstruction, quantization_loss = model(images=images)
+            reconstruction, quantization_loss = model(images)
             # Calculate the loss
             recons_loss = criterion(reconstruction.float(), images.float())
             loss = recons_loss + quantization_loss
@@ -89,4 +91,4 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
         print('Epoch: {}, \tTraining Loss: {:.6f}, \tValidation Loss: {:.6f}'.format(epoch + 1, train_loss, valid_loss))
 
     if save_model:
-        torch.save(model.state_dict(), 'vqvae.pt')
+        torch.save(model.state_dict(), f"vqvae_{config['latent_dim']}.pt")

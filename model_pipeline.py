@@ -14,7 +14,7 @@ def model_pipeline(config):
         trainer = importlib.import_module(trainer_path)
 
         def train():
-            with wandb.init(mode='disabled') as run:  # To disable wandb: mode='disabled'
+            with wandb.init() as run:  # To disable wandb: mode='disabled'
                 # Initialize the model, data and optimization problem
                 model, train_loader, valid_loader, criterion, optimizer = trainer.make(config)
 

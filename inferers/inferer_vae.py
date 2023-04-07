@@ -10,7 +10,6 @@ from processing.postprocessing import postprocessing_pipeline
 def run(config, data='ixi_synth'):
     torch.manual_seed(42)
     root, preprocess_data = config['test_data_path'], config['preprocess_data']
-    latent_dim = config['latent_dim']
 
     latent_dim = config['latent_dim']
     model = VAE(latent_dim)
@@ -46,7 +45,6 @@ def run(config, data='ixi_synth'):
         dataset = brats.BRATS(root, transform, preprocess_data=preprocess_data)
         data_loader = brats.get_loader(dataset, batch_size=1)
 
-        c = 0
         for images, masks in data_loader:
             reconstruction, _, _ = model(images)
 
@@ -55,8 +53,6 @@ def run(config, data='ixi_synth'):
             reconstruction = reconstruction[0].squeeze().detach().numpy()
 
             residual, binary_mask, refined_mask = postprocessing_pipeline(img, reconstruction, 30)
-
-            c += 1
 
             plt.figure(figsize=(20, 5))
             plt.subplot(141)

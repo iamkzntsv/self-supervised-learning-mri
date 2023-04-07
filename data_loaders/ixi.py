@@ -17,7 +17,7 @@ class IXI(Dataset):
 
         if not preprocess_data:
             print("Loading preprocessed data...")
-            self.samples = load_h5(root)
+            self.samples = load_h5('ixi_data')
             if len(self.samples) > 0:
                 print("Data loading successful. {} images collected from IXI dataset.".format(len(self.samples)))
             else:

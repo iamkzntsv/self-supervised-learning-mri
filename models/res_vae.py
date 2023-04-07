@@ -55,7 +55,7 @@ class Encoder(nn.Module):
         self.bn_1 = nn.BatchNorm2d(8)
         self.relu = nn.ReLU(inplace=True)
 
-        self.layer_1 = self._make_layer(4, layers[0], stride=2)
+        self.layer_1 = self._make_layer(8, layers[0], stride=2)
         self.layer_2 = self._make_layer(8, layers[1], stride=2)
         self.layer_3 = self._make_layer(16, layers[2], stride=2)
         self.layer_4 = self._make_layer(32, layers[3])

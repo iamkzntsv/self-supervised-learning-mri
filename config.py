@@ -40,7 +40,7 @@ def get_sweep_config(model_name):
         },
         'parameters': {
             'batch_size': {'values': [64]},
-            'lr': {'values': [1e-3]},
+            'lr': {'values': [1e-4]},
             'latent_dim': {'values': [128]}
         }
     }
@@ -53,9 +53,9 @@ def get_sweep_config(model_name):
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [64]},
-            'lr': {'values': [1e-3]},
-            'latent_dim': {'values': [128]}
+            'batch_size': {'values': [32, 64, 128]},
+            'lr': {'values': [1e-3, 1e-4]},
+            'dropout': {0.0, 0.2, 0.4}
         }
     }
 
@@ -81,8 +81,9 @@ def get_sweep_config(model_name):
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [64]},
-            'lr': {'values': [1e-3]}
+            'batch_size': {'values': [32, 64]},
+            'lr': {'values': [1e-3, 1e-4]},
+            'embedding_dim': {'values': [16, 32, 64]}
         }
     }
 
@@ -96,7 +97,7 @@ def get_sweep_config(model_name):
         'parameters': {
             'batch_size': {'values': [32, 64]},
             'lr': {'values': [1e-3, 1e-4, 1e-5]},
-            'latent_dim': {'values': [32, 64, 128, 256, 512]},
+            'latent_dim': {'values': [128]},
             'attn_layers_dim': {'values': [128, 64, 32]},
             'attn_layers_depth': {'values': [4, 8, 12]},
             'attn_layers_heads': {'values': [4, 8]},

@@ -7,11 +7,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class VQVAE(nn.Module):
-    def __init__(self, latent_dim, commitment_cost=0.01, dropout_rate=0.2):
+    def __init__(self, latent_dim, embedding_dim=32, commitment_cost=0.01, dropout_rate=0.2):
         super(VQVAE, self).__init__()
-        self.latent_dim = latent_dim
-        self.commitment_cost = commitment_cost
-        self.dropout_rate = dropout_rate
 
         num_channels = (32, 64, 128, 128)
         num_res_channels = (32, 64, 128, 128)
@@ -29,7 +26,7 @@ class VQVAE(nn.Module):
             downsample_parameters=downsample_parameters,
             upsample_parameters=upsample_parameters,
             num_embeddings=latent_dim,
-            embedding_dim=32,
+            embedding_dim=embedding_dim,
             commitment_cost=commitment_cost,
             dropout=dropout_rate,
             output_act=Act["sigmoid"]

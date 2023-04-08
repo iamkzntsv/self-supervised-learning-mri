@@ -23,13 +23,13 @@ def model_pipeline(config):
 
                 return model
 
-        wandb.agent(sweep_id, function=train, count=45)
+        wandb.agent(sweep_id, function=train, count=18)
 
     elif config['mode'] == 'test':
         torch.manual_seed(42)
 
         inferer_path = "inferers." + 'inferer_' + config['model_name']
         inferer = importlib.import_module(inferer_path)
-        inferer.run(config, data='brats')
+        inferer.run(config, data='ixi_synth')
 
 

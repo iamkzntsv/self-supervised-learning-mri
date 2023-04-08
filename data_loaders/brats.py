@@ -25,7 +25,7 @@ class BRATS(Dataset):
             if len(self.samples) > 0:
                 print("Data loading successful. {} images collected from BRATS dataset.".format(len(self.samples)))
             else:
-                print("Data loading error. Check the data path")
+                print(f"Failed fetching the data from {root}. Check the data path")
                 sys.exit(0)
 
         else:

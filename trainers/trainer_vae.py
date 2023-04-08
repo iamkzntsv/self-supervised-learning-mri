@@ -13,7 +13,8 @@ def make(config):
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
-    latent_dim = wandb.config.latent_dim
+    latent_dim = config['latent_dim']
+    dropout = wandb.config.dropout
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
@@ -23,7 +24,7 @@ def make(config):
     torch.manual_seed(42)
 
     # Instantiate the model
-    model = VAE(latent_dim)
+    model = VAE(latent_dim, dropout)
     model.train()
 
     # Loss function and Optimizer

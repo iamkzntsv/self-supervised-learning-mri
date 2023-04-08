@@ -30,7 +30,6 @@ class Encoder(nn.Module):
                 nn.Sequential(
                     conv,
                     layer_norm,
-                    nn.BatchNorm2d(f),
                     nn.LeakyReLU()
                 )
             )

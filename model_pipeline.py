@@ -14,7 +14,7 @@ def model_pipeline(config):
         trainer = importlib.import_module(trainer_path)
 
         def train():
-            with wandb.init() as run:  # To disable wandb: mode='disabled'
+            with wandb.init() as run:  # To disable logging: mode='disabled'
                 # Initialize the model, data and optimization problem
                 model, train_loader, valid_loader, criterion, optimizer = trainer.make(config)
 
@@ -23,7 +23,7 @@ def model_pipeline(config):
 
                 return model
 
-        wandb.agent(sweep_id, function=train, count=1)
+        wandb.agent(sweep_id, function=train, count=45)
 
     elif config['mode'] == 'test':
         torch.manual_seed(42)

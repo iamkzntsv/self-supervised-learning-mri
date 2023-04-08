@@ -1,5 +1,3 @@
-import torch.cuda
-
 from config import get_config
 from model_pipeline import *
 import argparse
@@ -15,8 +13,7 @@ def main():
     # conda run -n myGPUenv python main.py -m test -n vae -l 128
     parser = argparse.ArgumentParser(description='Choose the model to run')
     parser.add_argument('-m', '--mode', type=str, help='Mode (train/test)')
-    parser.add_argument('-n', '--model_name', type=str, help='Model name')
-    parser.add_argument('-l', '--latent_dim', type=int, help='Latent space size')
+    parser.add_argument('-n', '--model_name', type=str, help='Model name (e.g. vae_128)')
     args = parser.parse_args()
 
     config = get_config(mode='test')
@@ -24,12 +21,12 @@ def main():
     """
     # wandb API key: c85c93a21cc371625da06a2c2a0b27b2061d0ba8
     # conda env create -f environment.yml
-    mode = 'test'
-    model_name = 'vqvae'
-    latent_dims = [32]
-    for latent_dim in latent_dims:
-        config = get_config(mode=mode, model_name=model_name, latent_dim=latent_dim)
-        model = model_pipeline(config)
+    # if train model_name: vae, if test model_name: vae_128
+    mode = 'train'
+    model_name = 'vqvae_transformer'
+
+    config = get_config(mode=mode, model_name=model_name)
+    model = model_pipeline(config)
 
 
 if __name__ == '__main__':

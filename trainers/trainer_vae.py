@@ -13,12 +13,14 @@ def make(config):
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
+    latent_dim = wandb.config.latent_dim
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
-    latent_dim = config['latent_dim']
+    # Ensure seed is the same for model initialization if multi-host training used
+    torch.manual_seed(42)
 
     # Instantiate the model
     model = VAE(latent_dim)
@@ -43,6 +45,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
 
     device = "cuda" if train_on_gpu else "cpu"
 
+    print('Training VAE Model...')
     model.to(device)
     for epoch in range(config['epochs']):
 

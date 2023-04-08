@@ -1,15 +1,22 @@
 import torch
+import torch.nn as nn
 from generative.networks.nets import DecoderOnlyTransformer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def get_transformer_model(spatial_shape):
-    transformer_model = DecoderOnlyTransformer(
-        num_tokens=256 + 1,  # 256 from num_embeddings input of VQVAE + 1 for Begin of Sentence (BOS) token
-        max_seq_len=spatial_shape[0] * spatial_shape[1],
-        attn_layers_dim=64,
-        attn_layers_depth=6,
-        attn_layers_heads=4,
-    )
-    return transformer_model
+class Transformer(nn.Module):
+    def __init__(self, spatial_shape, latent_dim, attn_layers_dim, attn_layers_depth, attn_layers_heads, embedding_dropout_rate):
+        super(Transformer, self).__init__()
+
+        self.transformer = DecoderOnlyTransformer(
+            num_tokens=latent_dim + 1,
+            max_seq_len=spatial_shape[0] * spatial_shape[1],
+            attn_layers_dim=32,
+            attn_layers_depth=2,
+            attn_layers_heads=2,
+            embedding_dropout_rate=0
+        )
+
+    def forward(self, x):
+        return self.transformer(x)

@@ -63,7 +63,8 @@ class IXI(Dataset):
         return [glob.glob(path + "/*.mgz", recursive=True)]
 
 
-def get_loader(dataset, batch_size, valid_size=0.2, num_workers=1, drop_last=False, seed=50):
+def get_loader(dataset, batch_size, valid_size=0.2, num_workers=1, drop_last=False):
+    seed = np.random.randint(100)
     torch.manual_seed(seed)
     np.random.seed(seed)
 

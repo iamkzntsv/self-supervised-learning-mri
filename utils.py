@@ -42,3 +42,7 @@ def save_pickle(fname, file):
 def load_pickle(fname):
     with open(fname, 'rb') as f:
         return pickle.load(f)
+
+def split_string(s):
+    parts = s.split('_')
+    return parts[0], parts[1]

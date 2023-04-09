@@ -23,7 +23,7 @@ def model_pipeline(config):
 
                 return model
 
-        wandb.agent(sweep_id, function=train, count=18)
+        wandb.agent(sweep_id, function=train, count=12)
 
     elif config['mode'] == 'test':
         torch.manual_seed(42)

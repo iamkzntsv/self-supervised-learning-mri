@@ -59,8 +59,8 @@ def get_sweep_config(model_name):
         'parameters': {
             'batch_size': {'values': [32, 64, 128]},
             'lr': {'values': [1e-3, 1e-4]},
-            'dropout': {'values': [0.0, 0.2, 0.4]},
-            'use_batch_norm': {'values': [True, False]}
+            'dropout': {'values': [0.0, 0.3]},
+            'use_batch_norm': {'values': [True]}
         }
     }
 

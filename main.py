@@ -25,9 +25,8 @@ def main():
     mode = 'train'
     model_name = 'vae'
 
-    for latent_dim in [128]:
-        config = get_config(mode=mode, model_name=model_name, latent_dim=latent_dim)
-        model = model_pipeline(config)
+    config = get_config(mode=mode, model_name=model_name, latent_dim=128)
+    model = model_pipeline(config)
 
 
 if __name__ == '__main__':

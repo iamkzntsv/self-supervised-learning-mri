@@ -1,7 +1,12 @@
 name: myGPUenv
 channels:
-  - defaults
+  - conda-forge
+  - nvidia
+  - pytorch
 dependencies:
+  - nvidia::cudatoolkit=11.1
+  - python=3.8
+  - pytorch::pytorch
   - ca-certificates=2023.01.10=haa95532_0
   - certifi=2022.12.7=py38haa95532_0
   - libffi=3.4.2=hd77b12b_6
@@ -56,6 +61,8 @@ dependencies:
       - smmap==5.0.0
       - sympy==1.11.1
       - tifffile==2023.3.21
+      - torch==1.11.0+cu113
+      - torchvision==0.12.0+cu113
       - tqdm==4.65.0
       - typing-extensions==4.5.0
       - urllib3==1.26.15

@@ -1,15 +1,29 @@
+import torch
+import numpy as np
 import h5py
-import glob
 import pickle
 import wandb
+import math
 
 
-def calc_activation_shape(dim, ksize=(5, 5), stride=(1, 1), padding=(0, 0)):
-    import math
+def set_seed(seed_value):
+    torch.manual_seed(seed_value)
+    torch.cuda.manual_seed(seed_value)
+    torch.cuda.manual_seed_all(seed_value)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    np.random.seed(seed_value)
 
+
+def calc_activation_shape(dim, ksize=(5, 5), stride=(1, 1), padding=(0, 0), dilation=(1, 1), output_padding=(0, 0),
+                          transposed=False):
     def shape_each_dim(i):
-        odim_i = dim[i] + 2 * padding[i] - (ksize[i] - 1) - 1
-        return math.floor((odim_i / stride[i]) + 1)
+        if transposed:
+            odim_i = (dim[i] - 1) * stride[i] - 2 * padding[i] + dilation[i] * (ksize[i] - 1) + 1 + output_padding[i]
+        else:
+            odim_i = dim[i] + 2 * padding[i] - dilation[i] * (ksize[i] - 1) - 1
+            odim_i = odim_i / stride[i] + 1
+        return math.floor(odim_i)
 
     return shape_each_dim(0), shape_each_dim(1)
 
@@ -42,6 +56,7 @@ def save_pickle(fname, file):
 def load_pickle(fname):
     with open(fname, 'rb') as f:
         return pickle.load(f)
+
 
 def split_string(s):
     parts = s.split('_')

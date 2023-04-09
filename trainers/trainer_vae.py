@@ -3,6 +3,7 @@ from torch import optim
 from data_loaders import ixi
 from models.vae import VAE, LossVAE
 from processing.transforms import get_transform
+from utils import *
 
 
 import wandb
@@ -14,17 +15,19 @@ def make(config):
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
     latent_dim = config['latent_dim']
-    # dropout = wandb.config.dropout
+    dropout = wandb.config.dropout
+    use_batch_norm = wandb.config.use_batch_norm
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
     # Ensure seed is the same for model initialization if multi-host training used
-    torch.manual_seed(42)
+    seed_value = 42
+    set_seed(seed_value)
 
     # Instantiate the model
-    model = VAE(latent_dim)
+    model = VAE(latent_dim, dropout_rate=dropout, use_batch_norm=use_batch_norm)
     model.train()
 
     # Loss function and Optimizer

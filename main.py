@@ -22,11 +22,11 @@ def main():
     # wandb API key: c85c93a21cc371625da06a2c2a0b27b2061d0ba8
     # conda env create -f environment.yml
     # if train use model_name, e.g. vae, if test use model_name + latent_dim, e.g. vae_128
-    mode = 'test'
-    model_name = 'vae_32'
+    mode = 'train'
+    model_name = 'vae'
 
     for latent_dim in [128]:
-        config = get_config(mode=mode, model_name=model_name)
+        config = get_config(mode=mode, model_name=model_name, latent_dim=latent_dim)
         model = model_pipeline(config)
 
 

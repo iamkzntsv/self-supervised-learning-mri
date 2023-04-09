@@ -6,6 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 from processing.SliceExtractor import ext
 from utils import *
+import glob
 import sys
 
 
@@ -64,9 +65,8 @@ class IXI(Dataset):
 
 
 def get_loader(dataset, batch_size, valid_size=0.2, num_workers=1, drop_last=False):
-    seed = np.random.randint(100)
-    torch.manual_seed(seed)
-    np.random.seed(seed)
+    seed_value = np.random.randint(100)
+    set_seed(seed_value)
 
     # Get indices for training and validation data
     num_train = len(dataset)

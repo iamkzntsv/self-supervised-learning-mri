@@ -7,15 +7,11 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 class Encoder(nn.Module):
 
-    def __init__(self, in_channels, latent_dim, dropout_rate):
-        """
-        :param in_channels: number of channels in the input image
-        :param latent_dim: size of latent space (int)
-        :param dropout_rate: dropout probability (float)
-        """
+    def __init__(self, in_channels, latent_dim, dropout_rate, use_batch_norm=True):
         super(Encoder, self).__init__()
         self.latent_dim = latent_dim
         self.dropout_rate = dropout_rate
+        self.use_batch_norm = use_batch_norm
 
         filters = [32, 64, 128, 128]
         ln_shape = (128, 128)
@@ -25,11 +21,11 @@ class Encoder(nn.Module):
         for f in filters:
             conv = nn.Conv2d(in_channels, f, kernel_size=5, stride=2, padding=2)
             ln_shape = calc_activation_shape(ln_shape, ksize=(5, 5), stride=(2, 2), padding=(2, 2))
-            layer_norm = nn.LayerNorm([f, *ln_shape])
+            norm_layer = nn.BatchNorm2d(f) if use_batch_norm else nn.LayerNorm([f, *ln_shape])
             layers.append(
                 nn.Sequential(
                     conv,
-                    layer_norm,
+                    norm_layer,
                     nn.LeakyReLU()
                 )
             )
@@ -89,32 +85,37 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
 
-    def __init__(self, out_channels, latent_dim):
-        """
-        :param out_channels: number of channels in the reconstruction
-        :param latent_dim: size of the latent space
-        """
+    def __init__(self, out_channels, latent_dim, use_batch_norm=True, dropout_rate=0.2):
         super(Decoder, self).__init__()
         self.out_channels = out_channels
         self.latent_dim = latent_dim
+        self.use_batch_norm = use_batch_norm
+        self.dropout_rate = dropout_rate
 
         # Dimensions of hidden layers
         filters = [128, 128, 64, 32, 32]
+        ln_shape = (8, 8)
 
         # Build the decoder
-        self.decoder_input = nn.Linear(latent_dim, 1024)
+        self.decoder_input = nn.Sequential(
+            nn.Linear(latent_dim, 1024),
+            nn.Dropout(dropout_rate)
+        )
 
         layers = [nn.Sequential(
             nn.ConvTranspose2d(16, 128, kernel_size=1, stride=1),
-            nn.BatchNorm2d(128),
+            nn.BatchNorm2d(128) if use_batch_norm else nn.LayerNorm([128, 8, 8]),
             nn.LeakyReLU()
         )]
 
         for i in range(len(filters) - 1):
+            conv_transpose = nn.ConvTranspose2d(filters[i], filters[i + 1], kernel_size=5, stride=2, padding=2, output_padding=1)
+            ln_shape = calc_activation_shape(ln_shape, ksize=(5, 5), stride=(2, 2), padding=(2, 2), dilation=(1, 1), output_padding=(1, 1), transposed=True)
+            norm_layer = nn.BatchNorm2d(filters[i + 1]) if use_batch_norm else nn.LayerNorm([filters[i + 1], *ln_shape])
             layers.append(
                 nn.Sequential(
-                    nn.ConvTranspose2d(filters[i], filters[i + 1], kernel_size=5, stride=2, padding=2, output_padding=1),
-                    nn.BatchNorm2d(filters[i + 1]),
+                    conv_transpose,
+                    norm_layer,
                     nn.LeakyReLU()
                 )
             )
@@ -145,11 +146,11 @@ class Decoder(nn.Module):
 
 class VAE(nn.Module):
 
-    def __init__(self, latent_dim, dropout_rate=0.2):
+    def __init__(self, latent_dim, dropout_rate=0.2, use_batch_norm=False):
         super(VAE, self).__init__()
         self.latent_dim = latent_dim
-        self.encoder = Encoder(1, latent_dim, dropout_rate)
-        self.decoder = Decoder(1, latent_dim)
+        self.encoder = Encoder(1, latent_dim, dropout_rate, use_batch_norm)
+        self.decoder = Decoder(1, latent_dim, use_batch_norm)
 
     def encode(self, x):
         z, _, _ = self.encoder(x)

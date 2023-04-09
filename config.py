@@ -10,11 +10,15 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
     sigma = 0.01
     preprocess_data = False
 
+    """
     if mode == 'train':
         sweep_configuration = get_sweep_config(model_name)
     elif mode == 'test':
         sweep_configuration = None
         model_name, latent_dim = split_string(model_name)
+    """
+
+    sweep_configuration = get_sweep_config(model_name)
 
     return {'mode': mode,
             'model_name': model_name,
@@ -23,7 +27,7 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
             'epochs': epochs,
             'dropout': dropout,
             'sigma': sigma,
-            'latent_dim': int(latent_dim),
+            'latent_dim': latent_dim,
             'preprocess_data': preprocess_data,
             'train_data_path': TRAIN_DATA_PATH,
             'test_data_path': TEST_DATA_PATH,
@@ -53,9 +57,10 @@ def get_sweep_config(model_name):
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [64]},
-            'lr': {'values': [1e-3]},
-            'latent_dim': {'values': [128]}
+            'batch_size': {'values': [32, 64, 128]},
+            'lr': {'values': [1e-3, 1e-4]},
+            'dropout': {'values': [0.0, 0.2, 0.4]},
+            'use_batch_norm': {'values': [True, False]}
         }
     }
 

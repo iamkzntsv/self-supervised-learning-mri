@@ -20,8 +20,8 @@ class BRATS(Dataset):
 
         if not preprocess_data:
             print("Loading data from a disk...")
-            self.samples = load_h5('brats_data')
-            self.masks = load_h5('brats_masks')
+            self.samples = load_h5('data/brats_data')
+            self.masks = load_h5('data/brats_masks')
             if len(self.samples) > 0:
                 print("Data loading successful. {} images collected from BRATS dataset.".format(len(self.samples)))
             else:

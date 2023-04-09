@@ -11,8 +11,8 @@ class IXISynth(Dataset):
         self.transform = transform
 
         print("Loading data from a disk...")
-        self.samples = load_h5('ixi_test_data')
-        self.masks = load_h5('ixi_test_masks')
+        self.samples = load_h5('data/ixi_test_data')
+        self.masks = load_h5('data/ixi_test_masks')
         if len(self.samples) > 0:
             print("Data loading successful. {} images collected from BRATS dataset.".format(len(self.samples)))
         else:

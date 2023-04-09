@@ -25,8 +25,9 @@ def main():
     mode = 'test'
     model_name = 'vae_32'
 
-    config = get_config(mode=mode, model_name=model_name)
-    model = model_pipeline(config)
+    for latent_dim in [128]:
+        config = get_config(mode=mode, model_name=model_name)
+        model = model_pipeline(config)
 
 
 if __name__ == '__main__':

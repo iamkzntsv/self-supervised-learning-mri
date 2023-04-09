@@ -40,7 +40,7 @@ def get_sweep_config(model_name):
         },
         'parameters': {
             'batch_size': {'values': [64]},
-            'lr': {'values': [1e-4]},
+            'lr': {'values': [1e-3]},
             'latent_dim': {'values': [128]}
         }
     }
@@ -53,9 +53,9 @@ def get_sweep_config(model_name):
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [32, 64, 128]},
-            'lr': {'values': [1e-3, 1e-4]},
-            'dropout': {0.0, 0.2, 0.4}
+            'batch_size': {'values': [64]},
+            'lr': {'values': [1e-3]},
+            'latent_dim': {'values': [128]}
         }
     }
 

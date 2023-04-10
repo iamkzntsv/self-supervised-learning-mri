@@ -4,6 +4,7 @@ from data_loaders import ixi
 from models.res_vae import ResVAE
 from models.vae import LossVAE
 from processing.transforms import get_transform
+from utils import *
 
 import wandb
 
@@ -20,7 +21,8 @@ def make(config):
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
     # Ensure seed is the same for model initialization if multi-host training used
-    torch.manual_seed(42)
+    seed_value = 42
+    set_seed(seed_value)
 
     # Instantiate the model
     model = ResVAE(latent_dim)

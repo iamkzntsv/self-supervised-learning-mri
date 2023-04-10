@@ -21,7 +21,6 @@ def main():
     """
     # wandb API key: c85c93a21cc371625da06a2c2a0b27b2061d0ba8
     # conda env create -f environment.yml
-    # if train use model_name, e.g. vae, if test use model_name + latent_dim, e.g. vae_128
     mode = 'train'
     model_name = 'vqvae'
 

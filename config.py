@@ -82,7 +82,7 @@ def get_sweep_config(model_name):
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [32, 64]},
+            'batch_size': {'values': [16, 32, 64]},
             'lr': {'values': [1e-3, 1e-4]},
             'embedding_dim': {'values': [16, 32, 64]}
         }

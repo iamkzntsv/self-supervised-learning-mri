@@ -8,6 +8,7 @@ from processing.transforms import get_transform
 from generative.utils.enums import OrderingType
 from generative.utils.ordering import Ordering
 from generative.inferers import VQVAETransformerInferer
+from utils import *
 
 import wandb
 import sys
@@ -43,7 +44,8 @@ def make(config):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Ensure seed is the same for model initialization if multi-host training used
-    torch.manual_seed(42)
+    seed_value = 42
+    set_seed(seed_value)
 
     # Initialize the Transformer model
     transformer_model = Transformer(spatial_shape, latent_dim, attn_layers_dim, attn_layers_depth, attn_layers_heads, embedding_dropout_rate)

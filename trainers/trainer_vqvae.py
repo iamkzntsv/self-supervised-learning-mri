@@ -4,6 +4,7 @@ from models.vqvae import VQVAE
 import torch.optim as optim
 from data_loaders import ixi
 from processing.transforms import get_transform
+from utils import *
 
 import wandb
 
@@ -21,8 +22,9 @@ def make(config):
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
-    # Ensure seed is the same for model initialization if distributed training used
-    torch.manual_seed(42)
+    # Ensure seed is the same for model initialization if multi-host training used
+    seed_value = 42
+    set_seed(seed_value)
 
     # Instantiate the model
     model = VQVAE(latent_dim=latent_dim, embedding_dim=embedding_dim)

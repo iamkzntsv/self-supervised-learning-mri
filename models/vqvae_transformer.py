@@ -12,10 +12,10 @@ class Transformer(nn.Module):
         self.transformer = DecoderOnlyTransformer(
             num_tokens=latent_dim + 1,
             max_seq_len=spatial_shape[0] * spatial_shape[1],
-            attn_layers_dim=32,
-            attn_layers_depth=2,
-            attn_layers_heads=2,
-            embedding_dropout_rate=0
+            attn_layers_dim=attn_layers_dim,
+            attn_layers_depth=attn_layers_depth,
+            attn_layers_heads=attn_layers_heads,
+            embedding_dropout_rate=embedding_dropout_rate
         )
 
     def forward(self, x):

@@ -1,6 +1,5 @@
 import torch
 import importlib
-from skimage import exposure
 import wandb
 
 
@@ -23,7 +22,7 @@ def model_pipeline(config):
 
                 return model
 
-        wandb.agent(sweep_id, function=train, count=12)
+        wandb.agent(sweep_id, function=train)
 
     elif config['mode'] == 'test':
         torch.manual_seed(42)

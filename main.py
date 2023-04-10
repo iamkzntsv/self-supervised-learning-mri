@@ -23,7 +23,7 @@ def main():
     # conda env create -f environment.yml
     # if train use model_name, e.g. vae, if test use model_name + latent_dim, e.g. vae_128
     mode = 'train'
-    model_name = 'vae'
+    model_name = 'vqvae'
 
     config = get_config(mode=mode, model_name=model_name, latent_dim=128)
     model = model_pipeline(config)

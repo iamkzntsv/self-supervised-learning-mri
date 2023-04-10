@@ -10,15 +10,11 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
     sigma = 0.01
     preprocess_data = False
 
-    """
     if mode == 'train':
         sweep_configuration = get_sweep_config(model_name)
     elif mode == 'test':
         sweep_configuration = None
         model_name, latent_dim = split_string(model_name)
-    """
-
-    sweep_configuration = get_sweep_config(model_name)
 
     return {'mode': mode,
             'model_name': model_name,
@@ -79,7 +75,7 @@ def get_sweep_config(model_name):
     }
 
     config_vqvae = {
-        'method': 'random',
+        'method': 'grid',
         'name': 'sweep',
         'metric': {
             'goal': 'minimize',

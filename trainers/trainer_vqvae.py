@@ -13,7 +13,9 @@ def make(config):
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
-    latent_dim = wandb.config.latent_dim
+    embedding_dim = wandb.config.embedding_dim
+
+    latent_dim = config['latent_dim']
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
@@ -23,7 +25,7 @@ def make(config):
     torch.manual_seed(42)
 
     # Instantiate the model
-    model = VQVAE(latent_dim)
+    model = VQVAE(latent_dim=latent_dim, embedding_dim=embedding_dim)
     model.train()
 
     # Loss function and Optimizer

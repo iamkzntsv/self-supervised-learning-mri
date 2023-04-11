@@ -20,7 +20,7 @@ def make(config):
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
 
-    latent_dim = wandb.config.latent_dim
+    latent_dim = config['latent_dim']
 
     attn_layers_dim = wandb.config.attn_layers_dim
     attn_layers_depth = wandb.config.attn_layers_depth

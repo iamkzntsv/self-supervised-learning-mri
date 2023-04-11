@@ -46,17 +46,17 @@ def get_sweep_config(model_name):
     }
 
     config_vae = {
-        'method': 'random',
+        'method': 'grid',
         'name': 'sweep',
         'metric': {
             'goal': 'minimize',
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [32, 64, 128]},
-            'lr': {'values': [1e-3, 1e-4]},
-            'dropout': {'values': [0.0, 0.3]},
-            'use_batch_norm': {'values': [True, False]}
+            'batch_size': {'values': [32]},
+            'lr': {'values': [1e-3]},
+            'dropout': {'values': [0]},
+            'use_batch_norm': {'values': [False]}
         }
     }
 

@@ -13,8 +13,8 @@ def run(config, data='ixi_synth'):
 
     latent_dim = config['latent_dim']
 
-    model = VAE(latent_dim)
-    model.load_state_dict(torch.load(f'vae_32.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    model = VAE(32)
+    model.load_state_dict(torch.load(f'trained_models/vae_32.pt'))  # if CPU add param: map_location=torch.device('cpu')
     model.eval()
 
     transform = get_transform()

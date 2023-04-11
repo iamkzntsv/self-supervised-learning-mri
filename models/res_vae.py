@@ -11,12 +11,12 @@ class EncoderBottleneckBlock(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None):
         super(EncoderBottleneckBlock, self).__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(planes)
+        self.ln1 = nn.LayerNorm([planes, inplanes // planes, inplanes // planes]) # Replace BatchNorm2d with LayerNorm
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=5, stride=stride,
                                padding=2, bias=False)
-        self.bn2 = nn.BatchNorm2d(planes)
+        self.ln2 = nn.LayerNorm([planes, inplanes // (planes * stride), inplanes // (planes * stride)]) # Replace BatchNorm2d with LayerNorm
         self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
-        self.bn3 = nn.BatchNorm2d(planes * 4)
+        self.ln3 = nn.LayerNorm([planes * 4, inplanes // (planes * stride), inplanes // (planes * stride)]) # Replace BatchNorm2d with LayerNorm
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
         self.stride = stride
@@ -25,16 +25,15 @@ class EncoderBottleneckBlock(nn.Module):
         residual = x
 
         out = self.conv1(x)
-
-        out = self.bn1(out)
+        out = self.ln1(out) # Use LayerNorm instead of BatchNorm
         out = self.relu(out)
 
         out = self.conv2(out)
-        out = self.bn2(out)
+        out = self.ln2(out) # Use LayerNorm instead of BatchNorm
         out = self.relu(out)
 
         out = self.conv3(out)
-        out = self.bn3(out)
+        out = self.ln3(out) # Use LayerNorm instead of BatchNorm
 
         if self.downsample is not None:
             residual = self.downsample(x)
@@ -43,6 +42,7 @@ class EncoderBottleneckBlock(nn.Module):
         out = self.relu(out)
 
         return out
+
 
 
 class Encoder(nn.Module):

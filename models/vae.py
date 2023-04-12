@@ -34,8 +34,7 @@ class Encoder(nn.Module):
         layers.append(
             nn.Sequential(
                 nn.Conv2d(in_channels, 16, kernel_size=1, stride=1),
-                nn.LeakyReLU(),
-                nn.Dropout(dropout_rate),
+                nn.LeakyReLU()
             )
         )
 

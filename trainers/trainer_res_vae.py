@@ -16,6 +16,7 @@ def make(config):
     lr = wandb.config.lr
     dropout = wandb.config.dropout
     use_batch_norm = wandb.config.use_batch_norm
+    layer_list = wandb.config.layer_list
 
     latent_dim = config['latent_dim']
 
@@ -28,7 +29,7 @@ def make(config):
     set_seed(seed_value)
 
     # Instantiate the model
-    model = ResVAE(latent_dim, use_batch_norm=use_batch_norm)
+    model = ResVAE(latent_dim=latent_dim, use_batch_norm=use_batch_norm, dropout_rate=dropout, layer_list=layer_list)
     model.train()
 
     # Loss function and Optimizer

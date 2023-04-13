@@ -101,7 +101,7 @@ class Encoder(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def encode(self, x):
+    def forward(self, x):
         """
         Pass the input to the encoder and get the latent distribution
         :param x: input of shape (B, C, H, W)

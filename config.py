@@ -5,7 +5,7 @@ TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'  # Path to the test data, 
 
 
 def get_config(mode='train', model_name='vae', latent_dim=128):
-    epochs = 25
+    epochs = 50
     dropout = 0.2
     sigma = 0.01
     preprocess_data = False
@@ -32,7 +32,7 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
 
 def get_sweep_config(model_name):
     config_ae = {
-        'method': 'random',
+        'method': 'grid',
         'name': 'sweep',
         'metric': {
             'goal': 'minimize',
@@ -42,7 +42,8 @@ def get_sweep_config(model_name):
             'batch_size': {'values': [32, 64, 128]},
             'lr': {'values': [1e-3, 1e-4]},
             'dropout': {'values': [0, 0.2]},
-            'use_batch_norm': {'values': [True, False]}
+            'use_batch_norm': {'values': [True, False]},
+            'layer_list': {'values': [[1, 1, 1, 1]]}
         }
     }
 

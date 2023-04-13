@@ -59,5 +59,5 @@ def load_pickle(fname):
 
 
 def split_string(s):
-    parts = s.split('_')
+    parts = s.rsplit('_', 1)
     return parts[0], parts[1]

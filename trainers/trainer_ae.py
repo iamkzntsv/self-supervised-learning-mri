@@ -14,7 +14,11 @@ def make(config):
 
     batch_size = wandb.config.batch_size
     lr = wandb.config.lr
-    latent_dim = wandb.config.latent_dim
+    dropout = wandb.config.dropout
+    use_batch_norm = wandb.config.use_batch_norm
+    layer_list = wandb.config.layer_list
+
+    latent_dim = config['latent_dim']
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
@@ -25,7 +29,7 @@ def make(config):
     set_seed(seed_value)
 
     # Instantiate the model
-    model = AE(latent_dim)
+    model = AE(latent_dim=latent_dim, use_batch_norm=use_batch_norm, dropout_rate=dropout, layer_list=layer_list)
     model.train()
 
     # Loss function and Optimizer

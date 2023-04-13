@@ -104,7 +104,7 @@ class Encoder(nn.Module):
     def encode(self, x):
         """
         Pass the input to the encoder and get the latent distribution
-        :param x: data_loaders of shape (B, C, H, W)
+        :param x: input of shape (B, C, H, W)
         :return: vectors mu and log_var produced by the encoder
         """
         # Compute encoder output
@@ -260,8 +260,12 @@ class Decoder(nn.Module):
 
 class ResVAE(nn.Module):
 
-    def __init__(self, latent_dim, use_batch_norm=False, dropout_rate=0.0, layer_list=[3, 4, 6, 3]):
+    def __init__(self, latent_dim, use_batch_norm=False, dropout_rate=0.0, layer_list=None):
         super(ResVAE, self).__init__()
+
+        if layer_list is None:
+            layer_list = [3, 4, 6, 3]
+
         self.encoder = Encoder(latent_dim, use_batch_norm, dropout_rate, layer_list)
         self.decoder = Decoder(latent_dim, use_batch_norm, dropout_rate, layer_list)
         self.latent_dim = latent_dim

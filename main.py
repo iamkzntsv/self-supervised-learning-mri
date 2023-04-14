@@ -21,10 +21,10 @@ def main():
     """
     # wandb API key: c85c93a21cc371625da06a2c2a0b27b2061d0ba8
     # conda env create -f environment.yml
-    mode = 'train'
-    model_name = 'ae'
+    mode = 'test'
+    model_name = 'ae_32'
 
-    config = get_config(mode=mode, model_name=model_name, latent_dim=128)
+    config = get_config(mode=mode, model_name=model_name, latent_dim=32)
     model = model_pipeline(config)
 
 

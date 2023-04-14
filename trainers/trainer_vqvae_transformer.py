@@ -32,8 +32,8 @@ def make(config):
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
     # Instantiate the VQ-VAE
-    vqvae_model = VQVAE(latent_dim)
-    vqvae_model.load_state_dict(torch.load(f'trained_models/vqvae_{latent_dim}.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    vqvae_model = VQVAE(latent_dim=32, embedding_dim=64)
+    vqvae_model.load_state_dict(torch.load(f'vqvae_mix.pt'))  # if CPU add param: map_location=torch.device('cpu')
 
     # Get the tokens ordering
     test_data = next(iter(ixi_train_loader))

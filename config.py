@@ -5,7 +5,7 @@ TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'  # Path to the test data, 
 
 
 def get_config(mode='train', model_name='vae', latent_dim=128):
-    epochs = 50
+    epochs = 15
     dropout = 0.2
     sigma = 0.01
     preprocess_data = False
@@ -101,11 +101,11 @@ def get_sweep_config(model_name):
         },
         'parameters': {
             'batch_size': {'values': [32, 64]},
-            'lr': {'values': [1e-3, 1e-4, 1e-5]},
-            'attn_layers_dim': {'values': [128, 64, 32]},
+            'lr': {'values': [1e-4, 1e-5]},
+            'attn_layers_dim': {'values': [64, 32]},
             'attn_layers_depth': {'values': [4, 8, 12]},
             'attn_layers_heads': {'values': [4, 8]},
-            'embedding_dropout_rate': {'values': [0.0]}
+            'embedding_dropout_rate': {'values': [0.0, 0.2, 0.4]}
         }
     }
 

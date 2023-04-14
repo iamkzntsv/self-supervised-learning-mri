@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 from models.res_vae import ResVAE
-from data_loaders import ixi, brats
+from data_loaders import brats, ixi_synth
 from matplotlib import pyplot as plt
 from processing.transforms import get_transform
 from processing.postprocessing import postprocessing_pipeline

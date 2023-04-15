@@ -100,12 +100,12 @@ def get_sweep_config(model_name):
             'name': 'val_loss'
         },
         'parameters': {
-            'batch_size': {'values': [32, 64]},
-            'lr': {'values': [1e-4, 1e-5]},
-            'attn_layers_dim': {'values': [64, 32]},
-            'attn_layers_depth': {'values': [4, 8, 12]},
-            'attn_layers_heads': {'values': [4, 8]},
-            'embedding_dropout_rate': {'values': [0.0, 0.2, 0.4]}
+            'batch_size': {'values': [64]},
+            'lr': {'values': [1e-5]},
+            'attn_layers_dim': {'values': [32]},
+            'attn_layers_depth': {'values': [4]},
+            'attn_layers_heads': {'values': [4]},
+            'embedding_dropout_rate': {'values': [0.4]}
         }
     }
 

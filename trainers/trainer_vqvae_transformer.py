@@ -33,7 +33,7 @@ def make(config):
 
     # Instantiate the VQ-VAE
     vqvae_model = VQVAE(latent_dim=32, embedding_dim=64)
-    vqvae_model.load_state_dict(torch.load(f'vqvae_mix.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    vqvae_model.load_state_dict(torch.load(f'models/vqvae_transformer/vqvae_32.pt'))  # if CPU add param: map_location=torch.device('cpu')
 
     # Get the tokens ordering
     test_data = next(iter(ixi_train_loader))
@@ -129,4 +129,4 @@ def train(args, train_loader, valid_loader, criterion, optimizer, config, save_m
         print('Epoch: {}, \tTraining Loss: {:.6f}, \tValidation Loss: {:.6f}'.format(epoch + 1, train_loss, valid_loss))
 
     if save_model:
-        torch.save(transformer_model.state_dict(), 'vqvae_transformer.pt')
+        torch.save(transformer_model.state_dict(), 'vqvae_transformer_32.pt')

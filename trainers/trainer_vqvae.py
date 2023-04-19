@@ -12,9 +12,8 @@ import wandb
 def make(config):
     root, preprocess_data = config['train_data_path'], config['preprocess_data']
 
-    batch_size = wandb.config.batch_size
-    lr = wandb.config.lr
-    embedding_dim = wandb.config.embedding_dim
+    hyperparameters = config['hyperparameters']
+    batch_size, lr = hyperparameters['optim']['batch_size'], hyperparameters['optim']['lr']
 
     latent_dim = config['latent_dim']
 
@@ -27,7 +26,7 @@ def make(config):
     set_seed(seed_value)
 
     # Instantiate the model
-    model = VQVAE(latent_dim=latent_dim, embedding_dim=embedding_dim)
+    model = VQVAE(latent_dim=latent_dim, **hyperparameters['model'])
     model.train()
 
     # Loss function and Optimizer
@@ -38,8 +37,7 @@ def make(config):
 
 
 def train(model, train_loader, valid_loader, criterion, optimizer, config, save_model=False):
-    # Log gradients and parameters of the model
-    wandb.watch(model, criterion, log='all', log_freq=5)
+    batch_size = config['hyperparameters']['optim']['batch_size']
 
     train_on_gpu = torch.cuda.is_available()
     if not train_on_gpu:
@@ -70,7 +68,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Update parameters
             optimizer.step()
             # Update training_loss
-            train_loss += (loss.item() * wandb.config.batch_size)
+            train_loss += (loss.item() * batch_size)
 
         # Validation loop
         model.eval()
@@ -84,7 +82,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             recons_loss = criterion(reconstruction.float(), images.float())
             loss = recons_loss + quantization_loss
             # Update validation loss
-            valid_loss += (loss.item() * wandb.config.batch_size)
+            valid_loss += (loss.item() * batch_size)
 
         # Get average losses
         train_loss = train_loss / len(train_loader.sampler.indices)

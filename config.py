@@ -5,20 +5,19 @@ TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'  # Path to the test data, 
 
 
 def get_config(mode='train', model_name='vae', latent_dim=128):
-    epochs = 15
+    epochs = 20
     dropout = 0.2
     sigma = 0.01
     preprocess_data = False
 
-    if mode == 'train':
-        sweep_configuration = get_sweep_config(model_name)
-    elif mode == 'test':
-        sweep_configuration = None
+    if mode == 'infer':
         model_name, latent_dim = split_string(model_name)
+
+    hyperparameters = get_hp_config(model_name)
 
     return {'mode': mode,
             'model_name': model_name,
-            'sweep_configuration': sweep_configuration,
+            'hyperparameters': hyperparameters,
             'input_dims': (1, 128, 128),
             'epochs': epochs,
             'dropout': dropout,
@@ -30,84 +29,45 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
             }
 
 
-def get_sweep_config(model_name):
+def get_hp_config(model_name):
+
     config_ae = {
-        'method': 'grid',
-        'name': 'sweep',
-        'metric': {
-            'goal': 'minimize',
-            'name': 'val_loss'
-        },
-        'parameters': {
-            'batch_size': {'values': [32]},
-            'lr': {'values': [1e-3]},
-            'dropout': {'values': [0.2]},
-            'use_batch_norm': {'values': [True]},
-            'layer_list': {'values': [[1, 1, 1, 1]]}
-        }
-    }
+        'optim': {'batch_size': 32,
+                  'lr': 1e-3},
+        'model': {'dropout': 0.2,
+                  'use_batch_norm': True,
+                  'layer_list': [1, 1, 1, 1]}
+                }
 
     config_vae = {
-        'method': 'grid',
-        'name': 'sweep',
-        'metric': {
-            'goal': 'minimize',
-            'name': 'val_loss'
-        },
-        'parameters': {
-            'batch_size': {'values': [32]},
-            'lr': {'values': [1e-3]},
-            'dropout': {'values': [0]},
-            'use_batch_norm': {'values': [False]}
-        }
-    }
+        'optim': {'batch_size': 32,
+                  'lr': 1e-3},
+        'model': {'dropout': 0,
+                  'use_batch_norm': False}
+                 }
 
     config_res_vae = {
-        'method': 'grid',
-        'name': 'sweep',
-        'metric': {
-            'goal': 'minimize',
-            'name': 'val_loss'
-        },
-        'parameters': {
-            'batch_size': {'values': [16]},
-            'lr': {'values': [1e-3]},
-            'dropout': {'values': [0.0]},
-            'use_batch_norm': {'values': [True]},
-            'layer_list': {'values': [[1, 1, 1, 1]]}
-        }
-    }
+        'optim': {'batch_size': 16,
+                  'lr': 1e-3},
+        'model': {'dropout': 0.0,
+                  'use_batch_norm': True,
+                  'layer_list': [1, 1, 1, 1]}
+                 }
 
     config_vqvae = {
-        'method': 'grid',
-        'name': 'sweep',
-        'metric': {
-            'goal': 'minimize',
-            'name': 'val_loss'
-        },
-        'parameters': {
-            'batch_size': {'values': [16]},
-            'lr': {'values': [1e-4]},
-            'embedding_dim': {'values': [64]}
-        }
+        'optim': {'batch_size': 16,
+                  'lr': 1e-4},
+        'model': {'embedding_dim': 64}
     }
 
     config_vqvae_transformer = {
-        'method': 'random',
-        'name': 'sweep',
-        'metric': {
-            'goal': 'minimize',
-            'name': 'val_loss'
-        },
-        'parameters': {
-            'batch_size': {'values': [64]},
-            'lr': {'values': [1e-5]},
-            'attn_layers_dim': {'values': [32]},
-            'attn_layers_depth': {'values': [4]},
-            'attn_layers_heads': {'values': [4]},
-            'embedding_dropout_rate': {'values': [0.4]}
-        }
-    }
+        'optim': {'batch_size': 64,
+                  'lr': 1e-5},
+        'model': {'attn_layers_dim': 32,
+                  'attn_layers_depth': 4,
+                  'attn_layers_heads': 4,
+                  'embedding_dropout_rate': 0.4}
+                  }
 
     configs = {'ae': config_ae,
                'vae': config_vae,

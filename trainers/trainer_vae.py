@@ -12,10 +12,8 @@ import wandb
 def make(config):
     root, preprocess_data = config['train_data_path'], config['preprocess_data']
 
-    batch_size = wandb.config.batch_size
-    lr = wandb.config.lr
-    dropout = wandb.config.dropout
-    use_batch_norm = wandb.config.use_batch_norm
+    hyperparameters = config['hyperparameters']
+    batch_size, lr = hyperparameters['optim']['batch_size'], hyperparameters['optim']['lr']
 
     latent_dim = config['latent_dim']
 
@@ -28,7 +26,7 @@ def make(config):
     set_seed(seed_value)
 
     # Instantiate the model
-    model = VAE(latent_dim, dropout_rate=dropout, use_batch_norm=use_batch_norm)
+    model = VAE(latent_dim, **hyperparameters['model'])
     model.train()
 
     # Loss function and Optimizer
@@ -39,8 +37,7 @@ def make(config):
 
 
 def train(model, train_loader, valid_loader, criterion, optimizer, config, save_model=False):
-    # Log gradients and parameters of the model
-    wandb.watch(model, criterion, log='all', log_freq=5)
+    batch_size = config['hyperparameters']['optim']['batch_size']
 
     train_on_gpu = torch.cuda.is_available()
     if not train_on_gpu:
@@ -70,7 +67,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Update parameters
             optimizer.step()
             # Update training_loss
-            train_loss += (loss.item() * wandb.config.batch_size)
+            train_loss += (loss.item() * batch_size)
 
         # Validation loop
         model.eval()
@@ -83,7 +80,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, config, save_
             # Calculate the loss
             loss = criterion(x_hat, images, mu, log_var)
             # Update validation loss
-            valid_loss += (loss.item() * wandb.config.batch_size)
+            valid_loss += (loss.item() * batch_size)
 
         # Get average losses
         train_loss = train_loss / len(train_loader.sampler.indices)

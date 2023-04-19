@@ -10,30 +10,23 @@ from generative.utils.ordering import Ordering
 from generative.inferers import VQVAETransformerInferer
 from utils import *
 
-import wandb
-import sys
-
 
 def make(config):
     root, preprocess_data = config['train_data_path'], config['preprocess_data']
 
-    batch_size = wandb.config.batch_size
-    lr = wandb.config.lr
+    hyperparameters = config['hyperparameters']
 
-    latent_dim = config['latent_dim']
+    batch_size, lr = hyperparameters['optim']['batch_size'], hyperparameters['optim']['lr']
 
-    attn_layers_dim = wandb.config.attn_layers_dim
-    attn_layers_depth = wandb.config.attn_layers_depth
-    attn_layers_heads = wandb.config.attn_layers_heads
-    embedding_dropout_rate = wandb.config.embedding_dropout_rate
+    latent_dim = 128
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
     ixi_train_loader, ixi_valid_loader = ixi.get_loader(ixi_dataset, batch_size)
 
     # Instantiate the VQ-VAE
-    vqvae_model = VQVAE(latent_dim=32, embedding_dim=64)
-    vqvae_model.load_state_dict(torch.load(f'models/vqvae_transformer/vqvae_32.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    vqvae_model = VQVAE(latent_dim=latent_dim, embedding_dim=64)
+    vqvae_model.load_state_dict(torch.load(f'trained_models/vqvae_{latent_dim}.pt'))  # if CPU add param: map_location=torch.device('cpu')
 
     # Get the tokens ordering
     test_data = next(iter(ixi_train_loader))
@@ -48,7 +41,7 @@ def make(config):
     set_seed(seed_value)
 
     # Initialize the Transformer model
-    transformer_model = Transformer(spatial_shape, latent_dim, attn_layers_dim, attn_layers_depth, attn_layers_heads, embedding_dropout_rate)
+    transformer_model = Transformer(spatial_shape=spatial_shape, latent_dim=latent_dim, **hyperparameters['model'])
 
     inferer = VQVAETransformerInferer()
 
@@ -129,4 +122,4 @@ def train(args, train_loader, valid_loader, criterion, optimizer, config, save_m
         print('Epoch: {}, \tTraining Loss: {:.6f}, \tValidation Loss: {:.6f}'.format(epoch + 1, train_loss, valid_loss))
 
     if save_model:
-        torch.save(transformer_model.state_dict(), 'vqvae_transformer_32.pt')
+        torch.save(transformer_model.state_dict(),  f"vqvae_transformer_{config['latent_dim']}.pt")

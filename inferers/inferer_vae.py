@@ -11,9 +11,11 @@ def run(config, data='ixi_synth'):
     torch.manual_seed(42)
     root, preprocess_data = config['test_data_path'], config['preprocess_data']
 
+    hyperparameters = config['hyperparameters']
+
     latent_dim = config['latent_dim']
 
-    model = VAE(latent_dim)
+    model = VAE(latent_dim, **hyperparameters['model'])
     model.load_state_dict(torch.load(f'trained_models/vae_{latent_dim}.pt'))  # if CPU add param: map_location=torch.device('cpu')
     model.eval()
 

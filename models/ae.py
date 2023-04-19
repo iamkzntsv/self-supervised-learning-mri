@@ -53,11 +53,11 @@ class EncoderBottleneckBlock(nn.Module):
 
 class Encoder(nn.Module):
 
-    def __init__(self, latent_dim, use_batch_norm, dropout_rate, layers):
+    def __init__(self, latent_dim, use_batch_norm, dropout, layers):
         super(Encoder, self).__init__()
         self.latent_dim = latent_dim
         self.use_batch_norm = use_batch_norm
-        self.dropout_rate = dropout_rate
+        self.dropout = dropout
         self.layers = layers
 
         self.ln_shape = (128, 128)
@@ -166,14 +166,14 @@ class DecoderBottleneckBlock(nn.Module):
 
 class Decoder(nn.Module):
 
-    def __init__(self, latent_dim, use_batch_norm, dropout_rate, layers=[1, 1, 1, 1]):
+    def __init__(self, latent_dim, use_batch_norm, dropout, layers=[1, 1, 1, 1]):
         """
         :param latent_dim: size of the latent space
         """
         super(Decoder, self).__init__()
         self.latent_dim = latent_dim
         self.use_batch_norm = use_batch_norm
-        self.dropout_rate = dropout_rate
+        self.dropout = dropout
         self.layers = layers
         self.ln_shape = (8, 8)
 
@@ -234,14 +234,14 @@ class Decoder(nn.Module):
 
 
 class AE(nn.Module):
-    def __init__(self, latent_dim, use_batch_norm=False, dropout_rate=0.0, layer_list=None):
+    def __init__(self, latent_dim, use_batch_norm=False, dropout=0.0, layer_list=None):
         super(AE, self).__init__()
 
         if layer_list is None:
             layer_list = [3, 4, 6, 3]
 
-        self.encoder = Encoder(latent_dim, use_batch_norm, dropout_rate, layer_list)
-        self.decoder = Decoder(latent_dim, use_batch_norm, dropout_rate, layer_list)
+        self.encoder = Encoder(latent_dim, use_batch_norm, dropout, layer_list)
+        self.decoder = Decoder(latent_dim, use_batch_norm, dropout, layer_list)
 
     def forward(self, x):
         z = self.encoder(x)

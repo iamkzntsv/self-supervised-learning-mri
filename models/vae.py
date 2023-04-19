@@ -84,12 +84,12 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
 
-    def __init__(self, out_channels, latent_dim, use_batch_norm=True, dropout_rate=0.2):
+    def __init__(self, out_channels, latent_dim, use_batch_norm=True, dropout=0.2):
         super(Decoder, self).__init__()
         self.out_channels = out_channels
         self.latent_dim = latent_dim
         self.use_batch_norm = use_batch_norm
-        self.dropout_rate = dropout_rate
+        self.dropout = dropout
 
         # Dimensions of hidden layers
         filters = [128, 128, 64, 32, 32]
@@ -98,7 +98,7 @@ class Decoder(nn.Module):
         # Build the decoder
         self.decoder_input = nn.Sequential(
             nn.Linear(latent_dim, 1024),
-            nn.Dropout(dropout_rate)
+            nn.Dropout(dropout)
         )
 
         layers = [nn.Sequential(
@@ -145,10 +145,10 @@ class Decoder(nn.Module):
 
 class VAE(nn.Module):
 
-    def __init__(self, latent_dim, dropout_rate=0.2, use_batch_norm=False):
+    def __init__(self, latent_dim, dropout=0.2, use_batch_norm=False):
         super(VAE, self).__init__()
         self.latent_dim = latent_dim
-        self.encoder = Encoder(1, latent_dim, dropout_rate, use_batch_norm)
+        self.encoder = Encoder(1, latent_dim, dropout, use_batch_norm)
         self.decoder = Decoder(1, latent_dim, use_batch_norm)
 
     def encode(self, x):

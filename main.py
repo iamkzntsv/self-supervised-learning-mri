@@ -9,23 +9,19 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 def main():
-    """
-    # conda run -n myGPUenv python main.py -m test -n vae -l 128
-    parser = argparse.ArgumentParser(description='Choose the model to run')
-    parser.add_argument('-m', '--mode', type=str, help='Mode (train/test)')
-    parser.add_argument('-n', '--model_name', type=str, help='Model name (e.g. vae_128)')
-    args = parser.parse_args()
-
-    config = get_config(mode='test')
-    model = model_pipeline(config)
-    """
-    # wandb API key: c85c93a21cc371625da06a2c2a0b27b2061d0ba8
     # conda env create -f environment.yml
-    mode = 'test'
-    model_name = 'vqvae_transformer_32'
+    mode = 'infer'
+    if mode == 'infer':
+        # conda run -n myGPUenv python main.py -m test -n vae_128
+        parser = argparse.ArgumentParser(description='Choose the model to run')
+        parser.add_argument('-n', '--model_name', type=str, help='Model name (e.g. vae_128)')
+        args = vars(parser.parse_args())
 
-    config = get_config(mode=mode, model_name=model_name, latent_dim=32)
-    model = model_pipeline(config)
+        config = get_config(mode='infer', **args)
+        run_model_pipeline(config)
+    else:
+        config = get_config(mode=mode)
+        run_model_pipeline(config)
 
 
 if __name__ == '__main__':

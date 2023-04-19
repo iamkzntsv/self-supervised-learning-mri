@@ -18,7 +18,7 @@ def make(config):
 
     batch_size, lr = hyperparameters['optim']['batch_size'], hyperparameters['optim']['lr']
 
-    latent_dim = 128
+    latent_dim = config['latent_dim']
 
     transform = get_transform()
     ixi_dataset = ixi.IXI(root, transform, preprocess_data=preprocess_data)
@@ -26,7 +26,7 @@ def make(config):
 
     # Instantiate the VQ-VAE
     vqvae_model = VQVAE(latent_dim=latent_dim, embedding_dim=64)
-    vqvae_model.load_state_dict(torch.load(f'trained_models/vqvae_{latent_dim}.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    vqvae_model.load_state_dict(torch.load(f'trained_models/vqvae_{latent_dim}.pt', map_location=torch.device('cpu')))
 
     # Get the tokens ordering
     test_data = next(iter(ixi_train_loader))
@@ -53,6 +53,7 @@ def make(config):
 
 def train(args, train_loader, valid_loader, criterion, optimizer, config, save_model=False):
     transformer_model, vqvae_model, inferer, ordering = args
+    batch_size = config['hyperparameters']['optim']['batch_size']
 
     # Log gradients and parameters of the model
     wandb.watch(transformer_model, criterion, log='all', log_freq=5)
@@ -92,7 +93,7 @@ def train(args, train_loader, valid_loader, criterion, optimizer, config, save_m
             optimizer.step()
 
             # Update training_loss
-            train_loss += (loss.item() * wandb.config.batch_size)
+            train_loss += (loss.item() * batch_size)
 
         # Validation loop
         transformer_model.eval()
@@ -108,7 +109,7 @@ def train(args, train_loader, valid_loader, criterion, optimizer, config, save_m
                 loss = criterion(logits[:, :, :-1], quantizations_target[:, 1:])
 
                 # Update validation loss
-                valid_loss += (loss.item() * wandb.config.batch_size)
+                valid_loss += (loss.item() * batch_size)
 
         # Get average losses
         train_loss = train_loss / len(train_loader.sampler.indices)

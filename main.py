@@ -10,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 def main():
     # conda env create -f environment.yml
-    mode = 'infer'
+    mode = 'train'
     if mode == 'infer':
         # conda run -n myGPUenv python main.py -m test -n vae_128
         parser = argparse.ArgumentParser(description='Choose the model to run')
@@ -20,7 +20,8 @@ def main():
         config = get_config(mode='infer', **args)
         run_model_pipeline(config)
     else:
-        config = get_config(mode=mode)
+        model_name = 'vqvae_transformer'
+        config = get_config(mode='train', model_name=model_name, latent_dim=512)
         run_model_pipeline(config)
 
 

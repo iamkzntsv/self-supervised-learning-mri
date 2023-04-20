@@ -25,6 +25,6 @@ def run_model_pipeline(config):
 
         inferer_path = "inferers." + 'inferer_' + config['model_name']
         inferer = importlib.import_module(inferer_path)
-        inferer.run(config, data='ixi_synth')
+        inferer.run(config, data=config['data'])
 
 

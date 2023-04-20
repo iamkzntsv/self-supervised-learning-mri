@@ -4,8 +4,9 @@ TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data\train'  # IXI train data pat
 TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'  # Path to the test data, must be skull-stripped white matter normalized affine registered to 'fsaverage' T-1 weighted .nii/.mgz images
 
 
-def get_config(mode='train', model_name='vae', latent_dim=128):
-    epochs = 20
+def get_config(mode='train', model_name='vae', latent_dim=128, data=None):
+    epochs = 50
+
     dropout = 0.2
     sigma = 0.01
     preprocess_data = False
@@ -17,6 +18,7 @@ def get_config(mode='train', model_name='vae', latent_dim=128):
 
     return {'mode': mode,
             'model_name': model_name,
+            'data': data,
             'hyperparameters': hyperparameters,
             'input_dims': (1, 128, 128),
             'epochs': epochs,

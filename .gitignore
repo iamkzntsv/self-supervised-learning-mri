@@ -8,6 +8,7 @@ data/ixi_data.h5
 data/ixi_test_data.h5
 data/ixi_test_masks.h5
 data/
+/images_processed
 
 .idea/
 __pycache__/

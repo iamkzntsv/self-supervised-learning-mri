@@ -1,4 +1,4 @@
-import numpy as np
+import os
 import torch
 from models.res_vae import ResVAE
 from data_loaders import brats, ixi_synth
@@ -25,7 +25,11 @@ def run(config, data='ixi_synth'):
         dataset = ixi_synth.IXISynth(root, transform)
         data_loader = ixi_synth.get_loader(dataset, batch_size=1)
 
-        for images, masks in data_loader:
+        parent_dir = 'images_processed/'
+        os.mkdir(parent_dir)
+
+        print('Performing Anomaly Detection...')
+        for idx, (images, masks) in enumerate(data_loader):
             reconstruction, _, _ = model(images)
 
             img = images[0].squeeze().detach().numpy()
@@ -34,30 +38,40 @@ def run(config, data='ixi_synth'):
 
             residual, binary_mask, refined_mask = postprocessing_pipeline(img, reconstruction, 30)
 
-            plt.figure(figsize=(20, 5))
-            plt.subplot(141)
+            path = os.path.join('images_processed/', 'image' + str(idx))
+            os.mkdir(path)
+
+            plt.imshow(img, cmap='gray')
             plt.title('Anomalous Image')
             plt.axis('off')
-            plt.imshow(img, cmap='gray')
-            plt.subplot(142)
+            plt.savefig(os.path.join(path, 'image'))
+
             plt.imshow(residual, cmap='gray')
             plt.title('Residual')
             plt.axis('off')
-            plt.subplot(143)
+            plt.savefig(os.path.join(path, 'residual'))
+
             plt.imshow(refined_mask, cmap='gray')
             plt.title('Detected Anomaly')
             plt.axis('off')
-            plt.subplot(144)
+            plt.savefig(os.path.join(path, 'detected'))
+
             plt.imshow(mask, cmap='gray')
             plt.title('Ground Truth')
             plt.axis('off')
-            plt.show()
+            plt.savefig(os.path.join(path, 'gt_mask'))
+
+        print("Anomaly Detection performed successfully. Processed images can be found in 'images_processed/'.")
 
     elif data == 'brats':
         dataset = brats.BRATS(root, transform, preprocess_data=preprocess_data)
         data_loader = brats.get_loader(dataset, batch_size=1)
 
-        for images, masks in data_loader:
+        parent_dir = 'images_processed/'
+        os.mkdir(parent_dir)
+
+        print('Performing Anomaly Detection...')
+        for idx, (images, masks) in enumerate(data_loader):
             reconstruction, _, _ = model(images)
 
             img = images[0].squeeze().detach().numpy()
@@ -66,21 +80,27 @@ def run(config, data='ixi_synth'):
 
             residual, binary_mask, refined_mask = postprocessing_pipeline(img, reconstruction, 30)
 
-            plt.figure(figsize=(20, 5))
-            plt.subplot(141)
+            path = os.path.join('images_processed/', 'image' + str(idx))
+            os.mkdir(path)
+
+            plt.imshow(img, cmap='gray')
             plt.title('Anomalous Image')
             plt.axis('off')
-            plt.imshow(img, cmap='gray')
-            plt.subplot(142)
+            plt.savefig(os.path.join(path, 'image'))
+
             plt.imshow(residual, cmap='gray')
             plt.title('Residual')
             plt.axis('off')
-            plt.subplot(143)
+            plt.savefig(os.path.join(path, 'residual'))
+
             plt.imshow(refined_mask, cmap='gray')
             plt.title('Detected Anomaly')
             plt.axis('off')
-            plt.subplot(144)
+            plt.savefig(os.path.join(path, 'detected'))
+
             plt.imshow(mask, cmap='gray')
             plt.title('Ground Truth')
             plt.axis('off')
-            plt.show()
+            plt.savefig(os.path.join(path, 'gt_mask'))
+
+        print("Anomaly Detection performed successfully. Processed images can be found in 'images_processed/'.")

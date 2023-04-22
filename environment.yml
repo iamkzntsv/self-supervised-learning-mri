@@ -61,8 +61,8 @@ dependencies:
       - smmap==5.0.0
       - sympy==1.11.1
       - tifffile==2023.3.21
-      - torch==1.11.0+cu113
-      - torchvision==0.12.0+cu113
+      - torch==1.11.0
+      - torchvision==0.12.0
       - tqdm==4.65.0
       - typing-extensions==4.5.0
       - urllib3==1.26.15

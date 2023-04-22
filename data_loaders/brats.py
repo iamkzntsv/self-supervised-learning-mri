@@ -1,14 +1,9 @@
 import os
-import torch
-import numpy as np
 import nibabel as nib
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset, DataLoader
-from torch.utils.data.sampler import SubsetRandomSampler
 from processing.SliceExtractor import ext
 from utils import *
-import wandb
-import re
 import sys
 
 

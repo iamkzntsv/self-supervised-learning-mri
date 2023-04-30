@@ -8,8 +8,6 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
 def main():
-    # conda env create -f environment.yml
-    # conda run -n myGPUenv python main.py -n vqvae_transformer_32 -d brats
 
     parser = argparse.ArgumentParser(description='Choose the model to run')
     parser.add_argument('-n', '--model_name', type=str, help="Model name (e.g. vae_128)")

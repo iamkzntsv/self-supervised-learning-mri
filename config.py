@@ -1,7 +1,7 @@
 from utils import *
 
-TRAIN_DATA_PATH = r'C:\Users\sk768\Desktop\ixi_data\train'  # IXI train data path
-TEST_DATA_PATH = r'C:\Users\sk768\Desktop\brats_data'  # Path to the test data, must be skull-stripped white matter normalized affine registered to 'fsaverage' T-1 weighted .nii/.mgz images
+TRAIN_DATA_PATH = r''  # IXI train data path
+TEST_DATA_PATH = r''  # Path to the test data, must be skull-stripped white matter normalized affine registered to 'fsaverage' T-1 weighted .nii/.mgz images
 
 
 def get_config(mode='train', model_name='vae', latent_dim=128, data=None):

@@ -6,9 +6,7 @@ Welcome to the `self-supervised-learning-mri` repository! This project explores 
 
 ## Dependencies
 
-To use this project, you will need to have the MONAI Generative Models library installed. You can find it at the following link:
-
-[MONAI Generative Models](https://github.com/Project-MONAI/GenerativeModels)
+To use this project, you will need to have the [MONAI Generative Models](https://github.com/Project-MONAI/GenerativeModels) library installed.
 
 ## Data
 

@@ -10,6 +10,8 @@ To use this project, you will need to have the [MONAI Generative Models](https:/
 
 ## Data
 
+The training data and synthesized testing data can be downloaded from [here](https://drive.google.com/file/d/1ElQtgoOrTM1L0ZQZg7a8nzYYtx-900Fz/view?usp=sharing).
+
 Please download and extract the data in a suitable location on your machine. Place the `ixi_reference_image` file into the `processing/` folder.
 
 ## Getting Started

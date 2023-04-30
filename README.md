@@ -10,8 +10,6 @@ To use this project, you will need to have the [MONAI Generative Models](https:/
 
 ## Data
 
-The brain MRI data used in this project can be downloaded from the [following link](https://drive.google.com/file/d/1F-2TViYMBByG7fqjWtX9NPgvqYe6YKhm/view?usp=sharing).
-
 Please download and extract the data in a suitable location on your machine. Place the `ixi_reference_image` file into the `processing/` folder.
 
 ## Getting Started

@@ -4,11 +4,9 @@ Welcome to the `self-supervised-learning-mri` repository! This project explores 
 
 ![all_models_brats (1)](https://user-images.githubusercontent.com/49316611/235380655-344e6290-02df-4192-b9a5-9c85250cacc3.jpg)
 
-## Dependencies
+## Dependencies & Data
 
 To use this project, you will need to have the [MONAI Generative Models](https://github.com/Project-MONAI/GenerativeModels) library installed.
-
-## Data
 
 The training data and synthesized testing data can be downloaded from [here](https://drive.google.com/file/d/1ElQtgoOrTM1L0ZQZg7a8nzYYtx-900Fz/view?usp=sharing).
 

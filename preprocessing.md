@@ -1,4 +1,6 @@
 Install FreeSurfer from https://surfer.nmr.mgh.harvard.edu/fswiki/DownloadAndInstall
+
+```
 export FREESURFER_HOME=/Applications/freesurfer/7.3.2
 source ~ % source $FREESURFER_HOME/SetUpFreeSurfer.sh
 
@@ -27,3 +29,5 @@ for i in {0..580}; do
     mri_vol2vol --mov ${output_dir}/subject${i}/mri/seg.mgz --targ ${output_dir}/subject${i}/fsaverage/mri/brain.mgz --o ${output_dir}/subject${i}/mri/seg_transformed.mgz --lta ${output_dir}/subject${i}/mri/transform.lta --interp nearest
 
 done
+
+```

@@ -4,13 +4,19 @@ Welcome to the `self-supervised-learning-mri` repository! This project explores 
 
 ![all_models_brats (1)](https://user-images.githubusercontent.com/49316611/235380655-344e6290-02df-4192-b9a5-9c85250cacc3.jpg)
 
-## Dependencies & Data
+## Dependencies
 
 To use this project, you will need to have the [MONAI Generative Models](https://github.com/Project-MONAI/GenerativeModels) library installed.
+
+## Data
 
 The training data and synthesized testing data can be downloaded from [here](https://drive.google.com/file/d/1ElQtgoOrTM1L0ZQZg7a8nzYYtx-900Fz/view?usp=sharing).
 
 Please download and extract the data in a suitable location on your machine. Place the `ixi_reference_image` file into the `processing/` folder.
+
+To apply trained models to the new data it first needs to be preprocessed. The steps of the preprocessing pipeline implemented using FreeSurfer tool can be in [preprocessing.md](https://github.com/iamkzntsv/self-supervised-learning-mri/blob/master/preprocessing.md)
+
+Note: The pipeline assumes that the volumes are already skull-stripped. This can be performed for example using the [DeepBrain](https://github.com/iitzco/deepbrain) tool.
 
 ## Getting Started
 

@@ -28,9 +28,9 @@ To create and activate conda environment use the following commands:
 conda env create -f environment.yml
 conda run -n myGPUenv
 ```
-To run the project's code, specify the name of the model and the dataset you want to use:
+To run the project's code, specify the name of the model with preferred latent space size and the dataset you want to use:
 ```
-python main.py -n vqvae_32 -d brats
+python main.py -n vqvae_32 -d ixi_synth
 ```
 
 ## License

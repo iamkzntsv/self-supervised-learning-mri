@@ -13,31 +13,17 @@ To use this project, you will need to have the [MONAI Generative Models](https:/
 ```
 .
 ├── data_loaders                          # Dataloaders for each of the utilized datasets
-│   ├── brats.py
-│   ├── ixi.py
-│   └── ixi_synth.py
+│   └── ...
 ├── inferers                              # Inferers used to get anomaly masks
-│   ├── inferer_ae.py
-│   ├── inferer_res_vae.py
-│   ├── inferer_vae.py
-│   ├── inferer_vqvae.py
-│   └── inferer_vqvae_transformer.py      
+│   └── ...      
 ├── models                                # Model implementations
-│   ├── ae.py
-│   ├── res_vae.py
-│   ├── vae.py
-│   ├── vqvae.py
-│   └── vqvae_transformer.py   
+│   └── ...  
 ├── processing                            # Post- and pre-processing
 │   ├── SliceExtractor.py                 # Extract 2D slices from 3D volumes
 │   ├── postprocessing.py                 # Post-processing pipeline
 │   └── transforms.py                     # Composed PyTorch transforms
 ├── trainers                              # Model trainers
-│   ├── trainer_ae.py
-│   ├── trainer_res_vae.py
-│   ├── trainer_vae.py
-│   ├── trainer_vqvae.py
-│   └── trainer_vqvae_transformer.py  
+│   └── ... 
 ├── trained_models                        # pt files containing models' parameters
 │   └── ...
 ├── config.py

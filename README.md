@@ -42,8 +42,6 @@ To use this project, you will need to have the [MONAI Generative Models](https:/
 
 The training data and synthesized testing data can be downloaded from [here](https://drive.google.com/file/d/1ElQtgoOrTM1L0ZQZg7a8nzYYtx-900Fz/view?usp=sharing).
 
-Please download and extract the data in a suitable location on your machine. Place the `ixi_reference_image` file into the `processing/` folder.
-
 Applying trained models to the new data requires the data to be preprocessed. The steps of the preprocessing pipeline that uses the FreeSurfer tool can be found in [preprocessing.md](https://github.com/iamkzntsv/self-supervised-learning-mri/blob/master/preprocessing.md) file.
 
 Note: The pipeline assumes that the volumes are already skull-stripped. This can be performed for example using the [DeepBrain](https://github.com/iitzco/deepbrain) tool.

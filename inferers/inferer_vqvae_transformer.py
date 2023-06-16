@@ -21,7 +21,7 @@ def run(config, data='ixi_synth'):
 
     # Initializing the VQ-VAE model
     vqvae_model = VQVAE(latent_dim=latent_dim, embedding_dim=64)
-    vqvae_model.load_state_dict(torch.load(f'trained_models/vqvae_{latent_dim}.pt'))  # if CPU add param: map_location=torch.device('cpu')
+    vqvae_model.load_state_dict(torch.load(f'trained_models/vqvae_{latent_dim}.pt', map_location=torch.device('cpu')))
     vqvae_model.eval()
 
     spatial_shape = (8, 8)

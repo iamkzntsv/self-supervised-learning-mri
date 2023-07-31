@@ -4,7 +4,7 @@ Welcome to the `self-supervised-learning-mri` repository! This project explores 
 
 ![all_models_brats (1)](https://user-images.githubusercontent.com/49316611/235380655-344e6290-02df-4192-b9a5-9c85250cacc3.jpg)
 
-The project was submitted as a part of my BSc dissertation in Computer Science & Artificial Intelligence at the University of Sussex. The full text is accessible [here](https://drive.google.com/file/d/1Pz61WtpWyAF9CrWct5vUSdtCbTA4KV3O/view?usp=share_link).
+The project was submitted as part of my Bachelor of Science thesis in Computer Science and Artificial Intelligence at the University of Sussex and received a prestigious award from the British Computing Society. The full text is accessible [here](https://drive.google.com/file/d/1Pz61WtpWyAF9CrWct5vUSdtCbTA4KV3O/view?usp=share_link).
 
 ## Dependencies
 
